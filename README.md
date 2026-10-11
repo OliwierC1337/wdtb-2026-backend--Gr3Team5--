@@ -96,7 +96,7 @@ Nazwę projektu w repozytorium, pakiecie, klasie startowej i `artifactId` zmieni
 
 | Plik | Zmiana | Reguła |
 |---|---|---|
-| pakiet `pl.wsb.projekt` | *Refactor → Rename* na pakiecie → `pl.wsb.<nazwaprojektu>` | R1.01 |
+| pakiet `SystemObslugiAutomyjni` | *Refactor → Rename* na pakiecie → `pl.wsb.<nazwaprojektu>` | R1.01 |
 | `ProjektApplication.java` | *Refactor → Rename* na klasie → `<NazwaProjektu>Application` | R1.01 |
 | `pom.xml`, `<artifactId>` | `wdtb-2026-backend-<nazwaprojektu>` | R1.01 |
 | `pom.xml`, `<version>` | `1.0.0-<nrindeksu1>-<nrindeksu2>-<nrindeksu3>` | R1.05 |

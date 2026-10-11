@@ -1,4 +1,4 @@
-package pl.wsb.projekt;
+package pl.wsb.SystemObslugiAutomyjni;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,9 +11,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Reguła R1.01 sprawdza, czy to zrobiliście.
  */
 @SpringBootApplication
-public class ProjektApplication {
+public class SystemObslugiAutomyjniApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ProjektApplication.class, args);
+        SpringApplication.run(SystemObslugiAutomyjniApplication.class, args);
     }
 }
