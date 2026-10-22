@@ -12,7 +12,7 @@
 
     <groupId>pl.wsb</groupId>
     <!-- LAB 01: dopisz nazwę projektu (taką samą jak pakiet pl.wsb.<nazwaprojektu>), np. wdtb-2026-backend-kawiarnia -->
-    <artifactId>wdtb-2026-SystemObslugiAutomyjni</artifactId>
+    <artifactId>wdtb-2026-systemobslugiautomyjni</artifactId>
     <!-- LAB 01: wpisz numery indeksów osób z zespołu, np. 1.0.0-123456-123457-123458 (reguła R1.05) -->
     <version>1.0.0-113117-113625-113309</version>
     <name>WdTB-2026-Backend</name>

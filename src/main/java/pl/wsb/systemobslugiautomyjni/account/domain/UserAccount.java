@@ -1,4 +1,4 @@
-package pl.wsb.SystemObslugiAutomyjni.account.domain;
+package pl.wsb.systemobslugiautomyjni.account.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

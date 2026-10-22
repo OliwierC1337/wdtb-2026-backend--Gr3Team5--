@@ -1,4 +1,4 @@
-package pl.wsb.SystemObslugiAutomyjni.account.domain;
+package pl.wsb.systemobslugiautomyjni.account.domain;
 
 public enum AccountRole {
     USER,
