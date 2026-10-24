@@ -15,7 +15,20 @@ insert into user_account (email, display_name, role, created_at) values
 -- insert into user_account (email, display_name, role, created_at) values
 --     ('imie.nazwisko@student.merito.pl', 'Imię', 'USER', current_timestamp);
 -- ===== LAB 02 · <tabela 1> =====
-
+INSERT INTO `usage` (product_name, quantity_used, unit, used_at)
+VALUES
+    ('Szampon samochodowy', 1.50, 'litr', '2026-10-24 08:30:00'),
+    ('Wosk ochronny', 0.30, 'litr', '2026-10-24 09:15:00'),
+    ('Płyn do szyb', 0.50, 'litr', '2026-10-24 10:00:00');
 -- ===== LAB 02 · <tabela 2> =====
-
+INSERT INTO products (name, unit, current_quantity, min_threshold, updated_at)
+VALUES
+    ('Szampon samochodowy', 'litr', 25.50, 5.00, '2026-10-24 08:00:00'),
+    ('Wosk ochronny', 'litr', 12.00, 3.00, '2026-10-24 09:00:00'),
+    ('Płyn do szyb', 'litr', 2.50, 5.00, '2026-10-24 10:00:00');
 -- ===== LAB 02 · <tabela 3> =====
+INSERT INTO notifications (type, message, is_sent, created_at, sent_at)
+VALUES
+    ('INFO', 'Myjnia została uruchomiona.', TRUE, '2026-10-24 08:30:00', '2026-10-24 08:30:05'),
+    ('WARNING', 'Brak środka czyszczącego w systemie.', FALSE, '2026-10-24 09:15:00', NULL),
+    ('SUCCESS', 'Mycie pojazdu zostało zakończone.', TRUE, '2026-10-24 10:00:00', '2026-10-24 10:00:10');
