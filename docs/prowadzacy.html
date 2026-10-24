@@ -14,7 +14,7 @@
 <div class="wrap">
 <div class="top">
   <a class="logo" href="index.html"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></a>
-  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><span class="disabled" aria-disabled="true" title="Instrukcja pojawi się przed zajęciami">LAB 02</span><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
+  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html">LAB 02</a><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
 </div>
 <main class="doc"><article class="md">
 <h1>Dla prowadzącego: konfiguracja GitHub</h1>
@@ -39,7 +39,9 @@
 </ul>
 <h2>Jak działa sprawdzanie</h2>
 <ul>
-<li>Workflow <strong>Testy i reguły</strong> uruchamia się przy każdym pushu na <code>main</code>, każdym Pull Requeście i każdym tagu <code>lab-*</code>.</li>
+<li>Workflow <strong>Testy i reguły</strong> uruchamia się przy każdym pushu na <code>main</code>, każdym Pull Requeście i każdym tagu <code>lab-*</code>.
+  Ma dwa etapy: <strong>Ocena 4 · reguły obowiązkowe</strong> i <strong>Ocena 5 · warunki dodatkowe</strong> (testy z tagiem <code>ocena5</code>,
+  uruchamiane po zielonym etapie „Ocena 4”; czerwony etap „Ocena 5” nie oznacza całego przebiegu jako nieudanego).</li>
 <li><strong>Numer laboratorium bierze się z tagu:</strong> tag <code>lab-2</code> uruchamia reguły LAB 02, tag <code>lab-3-poprawa</code> reguły LAB 03.
   Przy pushu i PR obowiązuje <code>&lt;lab&gt;</code> z <code>pom.xml</code>.</li>
 <li>Przed testami workflow pobiera <strong>oficjalne reguły z szablonu</strong> i nadpisuje nimi <code>src/test/java/pl/wsb/rules</code>.
@@ -56,7 +58,7 @@ mvn verify -Dlab=N
 </code></pre>
 <h2>Ocena laboratorium (na koniec zajęć, ok. 5 min na zespół)</h2>
 <ol>
-<li>Przebieg <em>Testy i reguły</em> dla tagu <code>lab-N</code> jest zielony.</li>
+<li>Zespół pokazuje przebieg <em>Testy i reguły</em> dla ostatniego commita na <code>main</code> (albo uruchomiony ręcznie <em>Run workflow</em> z numerem laboratorium, albo dla opcjonalnego tagu <code>lab-N</code>): zielony etap „Ocena 4” to warunek konieczny, zielony etap „Ocena 5” to warunek oceny 5.</li>
 <li>Raport <em>Wkład członków zespołu</em>: czy każda osoba ma commity.</li>
 <li>Dowolna osoba z zespołu wyjaśnia wskazany fragment kodu: „co to robi?”, „dlaczego tak?”, „zmień X na Y”.</li>
 <li>Pytanie kontrolne z instrukcji laboratorium.</li>

@@ -9,20 +9,24 @@ Materiały przygotował: **Wojciech Koszela**, prowadzący
 [![E-mail](https://img.shields.io/badge/E--mail-wojciech.koszela%40wroclaw.merito.pl-C8102E)](mailto:wojciech.koszela@wroclaw.merito.pl)
 
 **Dokumentacja: [wkoszela.github.io/WdTB-2026-Backend--projectname--](https://wkoszela.github.io/WdTB-2026-Backend--projectname--/)**
-(instrukcja LAB 01: [`lab01.html`](https://wkoszela.github.io/WdTB-2026-Backend--projectname--/lab01.html)).
+(instrukcje: [LAB 01](https://wkoszela.github.io/WdTB-2026-Backend--projectname--/lab01.html),
+[LAB 02](https://wkoszela.github.io/WdTB-2026-Backend--projectname--/lab02.html)).
 Są tam instrukcje do zajęć, wymagania, zasady zaliczenia i opis reguł projektu.
+**Arkusz zespołów (Excel): [otwórz w SharePoint](https://m365ht-my.sharepoint.com/:x:/g/personal/wojciech_koszela_wroclaw_merito_pl/IQCEEPWN_2owS6zMeDfSfeG-AXpOGAC7AgOlj9SAudd8Y0w?e=S2s4H9)**, zakładka Waszej grupy.
 Te same strony znajdują się w katalogu [`docs/`](docs/index.html); po sklonowaniu repozytorium można je otworzyć lokalnie w przeglądarce.
 
 ## W skrócie
 
 - Zespół 3 osoby, jedno repozytorium: **fork** tego szablonu przemianowany na **`WdTB-2026-Backend-<nazwaprojektu>`**.
 - Każdy zespół buduje backend własnego projektu: encje i relacje, repozytoria i zapytania, serwisy, REST API.
+- **LAB 02 zaczyna się od prezentacji:** zespół uruchamia aplikację i pokazuje na http://localhost:8080 wypełnioną wizytówkę
+  projektu (`src/main/resources/static/index.html`, bez `[uzupełnij]`). Wizytówkę wypełniacie na LAB 01.
 - Wymagania każdego laboratorium sprawdzają automatyczne testy (reguły projektu) w GitHub Actions. Tag `lab-N` uruchamia reguły laboratorium N.
 
 | Zajęcia | Temat |
 |---|---|
 | LAB 01 | Start: projekt, aplikacja i opis pomysłu (bez oceny) |
-| LAB 02 | Encje i relacje w JPA |
+| LAB 02 | Encje JPA i dane startowe (ocena z pokazanego przebiegu w GitHub Actions) |
 | LAB 03 | Repozytoria i zapytania |
 | LAB 04 | Serwisy i komponenty |
 | LAB 05 | Kontrolery REST |
@@ -43,7 +47,7 @@ Robi to **jedna osoba z zespołu** (osoba hostująca), pozostałe osoby patrzą 
 4. **Zespół.** *Settings → Collaborators → Add people*: pozostałe osoby z zespołu, żeby mogły wysyłać zmiany.
    Zaproszone osoby akceptują zaproszenie (e-mail albo https://github.com/notifications). Prowadzącego nie dodajecie:
    repozytorium jest publiczne, wystarczy link w arkuszu.
-5. **Arkusz zespołów.** Jedna osoba wpisuje cały zespół w zakładce swojej grupy: nazwa projektu, link do repozytorium,
+5. **[Arkusz zespołów](https://m365ht-my.sharepoint.com/:x:/g/personal/wojciech_koszela_wroclaw_merito_pl/IQCEEPWN_2owS6zMeDfSfeG-AXpOGAC7AgOlj9SAudd8Y0w?e=S2s4H9).** Jedna osoba wpisuje cały zespół w zakładce swojej grupy: nazwa projektu, link do repozytorium,
    **krótki opis** (1–2 zdania: jaki problem rozwiązujecie i dla kogo) i dane trzech osób.
 
 O czym łatwo zapomnieć:
@@ -89,6 +93,7 @@ Dane dopisane ręcznie w konsoli H2 znikają po restarcie; to, co ma zostać, do
 | testy i reguły dla laboratorium z `<lab>` w `pom.xml` | panel *Maven* (prawa krawędź okna) → *Lifecycle* → dwuklik na *verify* |
 
 Wynik jest w oknie *Run*: przy każdej regule zielony albo czerwony znak, a przy czerwonej opis, co poprawić.
+W GitHub Actions przebieg „Testy i reguły” ma dwa etapy: *Ocena 4 · reguły obowiązkowe* i *Ocena 5 · warunki dodatkowe*.
 
 ## Co zmodyfikować na LAB 01
 
@@ -108,6 +113,24 @@ Na LAB 01 wystarczy, że zmiany zacommituje jedna osoba z zespołu. Zmiany wysy�
 Nie zmieniajcie katalogu `src/test/java/pl/wsb/rules` ani `.github/workflows`: tam są reguły, którymi sprawdzamy projekt.
 
 Szczegóły krok po kroku: `docs/lab01.html`.
+
+## Co zmodyfikować na LAB 02
+
+Instrukcja krok po kroku: `docs/lab02.html`. Zespół pracuje razem **na jednym laptopie**.
+
+| Plik | Zmiana | Reguła |
+|---|---|---|
+| `pom.xml`, `<lab>` | `1` → `2` (od razu commit i push) | włącza R2.xx |
+| `pl.wsb.<projekt>.<moduł>.entity` | 3 własne encje (`@Entity`) bez relacji; enumy i klasy `@Embeddable` w tych samych pakietach | R2.01–R2.02 |
+| typy pól | kwoty w `BigDecimal` (zalecenie) | — |
+| kolumny | co najmniej 4 kolumny poza `id` w każdej tabeli, w tym co najmniej jedna z `nullable = false` | R2.04–R2.05 |
+| `src/main/resources/data.sql` | sekcja per tabela, co najmniej 3 wiersze w każdej tabeli; sprawdzenie w konsoli H2 | R2.03 |
+| na ocenę 5 | kolumna typu enum z `@Enumerated(EnumType.STRING)` i klasa `@Embeddable` użyta przez `@Embedded` | R2.06–R2.07 |
+| `src/main/resources/static/index.html` | w liście zmian: co powstało na LAB 02 | — |
+
+Na koniec zajęć zespół pokazuje prowadzącemu przebieg „Testy i reguły” w zakładce *Actions* dla ostatniego commita na `main`.
+Przebieg można uruchomić ręcznie: *Actions* → *Testy i reguły* → *Run workflow* → numer laboratorium `2`.
+Opcjonalnie zespół tworzy tag `lab-2` (okno *Git* → *Log* → prawy przycisk na commicie → *New Tag…*, potem *Git → Push* z *Push Tags*).
 
 ## Konwencja nazw
 

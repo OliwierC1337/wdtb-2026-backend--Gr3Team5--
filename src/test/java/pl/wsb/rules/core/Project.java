@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.fail;
  * <p>Reguły są generyczne: nie znają domeny Waszego projektu. Wszystko wyznaczają z konwencji:
  * <pre>
  * pl.wsb.&lt;projekt&gt;                      ← klasa z @SpringBootApplication
- * pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.domain        ← encje, value objecty, enumy, repozytoria
+ * pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.entity        ← encje, @Embeddable, enumy
  * pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.application   ← serwisy, przypadki użycia     (LAB 03)
  * pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.api           ← publiczny kontrakt modułu     (LAB 03)
  * pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.web           ← kontrolery REST, DTO          (LAB 04)
@@ -48,8 +48,39 @@ public final class Project {
     private Project() {
     }
 
+    /**
+     * Numer laboratorium. W Mavenie i GitHub Actions z parametru {@code -Dlab} (z tagu lab-N albo z pom.xml).
+     * Gdy testy uruchamia IntelliJ (zielona strzałka przy klasie testowej), zawsze z {@code <lab>} w pom.xml na dysku:
+     * IntelliJ przekazuje {@code -Dlab} z ostatniego przeładowania Mavena, więc po zmianie pom.xml bywa nieaktualny.
+     * Domyślnie 1.
+     */
     public static int currentLab() {
-        return Integer.parseInt(System.getProperty("lab", "1").trim());
+        if (runByIntelliJ()) {
+            java.util.Optional<Integer> fromPom = labFromPom();
+            if (fromPom.isPresent()) {
+                return fromPom.get();
+            }
+        }
+        String fromProperty = System.getProperty("lab");
+        if (fromProperty != null && !fromProperty.isBlank()) {
+            return Integer.parseInt(fromProperty.trim());
+        }
+        return labFromPom().orElse(1);
+    }
+
+    private static boolean runByIntelliJ() {
+        return System.getProperty("sun.java.command", "").contains("com.intellij.rt.");
+    }
+
+    private static java.util.Optional<Integer> labFromPom() {
+        Path pom = projectDir().resolve("pom.xml");
+        try {
+            java.util.regex.Matcher m = java.util.regex.Pattern.compile("<lab>\\s*(\\d+)\\s*</lab>")
+                    .matcher(java.nio.file.Files.readString(pom));
+            return m.find() ? java.util.Optional.of(Integer.parseInt(m.group(1))) : java.util.Optional.empty();
+        } catch (java.io.IOException | RuntimeException e) {
+            return java.util.Optional.empty();
+        }
     }
 
     public static Path projectDir() {
@@ -110,7 +141,12 @@ public final class Project {
 
     /** Nazwa modułu klasy (pierwszy segment pod pakietem głównym) albo pusty, gdy klasa leży w pakiecie głównym. */
     public static Optional<String> moduleOf(JavaClass javaClass) {
-        String root = rootPackage() + ".";
+        return moduleOf(javaClass, rootPackage());
+    }
+
+    /** Jak {@link #moduleOf(JavaClass)}, ale względem podanego pakietu głównego (np. dla przykładów w testach reguł). */
+    public static Optional<String> moduleOf(JavaClass javaClass, String rootPackage) {
+        String root = rootPackage + ".";
         String pkg = javaClass.getPackageName();
         if (!pkg.startsWith(root)) {
             return Optional.empty();
@@ -122,7 +158,12 @@ public final class Project {
 
     /** Warstwa klasy w module (domain/application/api/web/infrastructure) albo pusty. */
     public static Optional<String> layerOf(JavaClass javaClass) {
-        String root = rootPackage() + ".";
+        return layerOf(javaClass, rootPackage());
+    }
+
+    /** Jak {@link #layerOf(JavaClass)}, ale względem podanego pakietu głównego. */
+    public static Optional<String> layerOf(JavaClass javaClass, String rootPackage) {
+        String root = rootPackage + ".";
         String pkg = javaClass.getPackageName();
         if (!pkg.startsWith(root)) {
             return Optional.empty();

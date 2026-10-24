@@ -14,7 +14,7 @@
 <div class="wrap">
   <div class="top">
     <span class="logo"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></span>
-    <nav class="jump" aria-label="Dokumentacja"><a href="index.html" aria-current="page">Start</a><a href="lab01.html">LAB 01</a><span class="disabled" aria-disabled="true" title="Instrukcja pojawi się przed zajęciami">LAB 02</span><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
+    <nav class="jump" aria-label="Dokumentacja"><a href="index.html" aria-current="page">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html">LAB 02</a><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
   </div>
 
   <header class="hero">
@@ -174,10 +174,10 @@
 
           <rect x="560" y="234" width="230" height="266" rx="12" class="dash"/>
           <text x="675" y="262" text-anchor="middle" class="label">Encje</text>
-          <text x="675" y="282" text-anchor="middle" class="mono small">@Entity · @ManyToOne</text>
+          <text x="675" y="282" text-anchor="middle" class="mono small">@Entity · @Column</text>
           <text x="675" y="312" text-anchor="middle" class="small muted">klasa Javy = tabela</text>
           <text x="675" y="330" text-anchor="middle" class="small muted">pole = kolumna</text>
-          <text x="675" y="348" text-anchor="middle" class="small muted">relacja = klucz obcy</text>
+          <text x="675" y="348" text-anchor="middle" class="small muted">wiersz = obiekt</text>
           <text x="675" y="378" text-anchor="middle" class="small muted">nie wychodzą poza</text>
           <text x="675" y="396" text-anchor="middle" class="small muted">serwis do kontrolera</text>
           <rect x="637" y="440" width="76" height="26" rx="13" class="pill"/>
@@ -195,24 +195,25 @@
     <div class="sec-head">
       <span class="sec-num">3. HARMONOGRAM</span>
       <h2>Siedem zajęć z każdą grupą</h2>
-      <p>Każda z siedmiu grup przechodzi ten sam program. Instrukcja LAB 01 jest w sekcji <a href="#instrukcje">Instrukcje</a> i w repozytorium (katalog <code>docs/</code>); kolejne pojawią się przed zajęciami.</p>
+      <p>Każda z siedmiu grup przechodzi ten sam program. Instrukcje LAB 01 i LAB 02 są w sekcji <a href="#instrukcje">Instrukcje</a> i w repozytorium (katalog <code>docs/</code>); kolejne pojawią się przed zajęciami.</p>
     </div>
     <div class="road">
       <article class="stop ready">
         <div class="badge">01</div>
         <div class="stop-body">
           <div class="stop-title"><h3>Start</h3><span class="tagp">bez oceny</span><span class="tagp ready">instrukcja</span></div>
-          <p>Powitanie, zespoły i fork szablonu. Zespół siada razem: uruchamia aplikację w IntelliJ, opracowuje pomysł i wpisuje go do projektu (nazwa, konta, wizytówka). Wizytówkę zespół prezentuje na początku LAB 02.</p>
+          <p>Powitanie, zespoły i fork szablonu. Zespół siada razem: uruchamia aplikację w IntelliJ, opracowuje pomysł i wpisuje go do projektu (nazwa, konta, wizytówka). <strong>LAB 02 zaczyna się od prezentacji: zespół uruchamia aplikację i pokazuje wypełnioną wizytówkę na <code>localhost:8080</code>.</strong></p>
           <div class="tags"><span class="tag">GitHub</span><span class="tag">IntelliJ</span><span class="tag">H2</span><span class="tag">wizytówka</span></div>
           <a class="go" href="lab01.html">Otwórz instrukcję LAB 01 →</a>
         </div>
       </article>
-      <article class="stop">
+      <article class="stop ready">
         <div class="badge">02</div>
         <div class="stop-body">
-          <div class="stop-title"><h3>Encje i relacje</h3></div>
-          <p>Pomysł zamieniamy w model JPA: 4–6 tabel, relacje 1:N, N:M i 1:1, enumy, kwoty w BigDecimal, dane startowe w data.sql.</p>
-          <div class="tags"><span class="tag">@Entity</span><span class="tag">@ManyToOne</span><span class="tag">@OneToMany</span><span class="tag">@ManyToMany</span><span class="tag">@OneToOne</span></div>
+          <div class="stop-title"><h3>Encje i dane startowe</h3><span class="tagp ready">instrukcja</span></div>
+          <p>Zaczynamy od prezentacji wizytówek. Potem encje na przykładzie kawiarni i klasa wbudowana <code>@Embeddable</code>, a w projekcie 3 własne tabele <strong>bez relacji</strong>: co najmniej 4 kolumny, kolumna wymagana i co najmniej 3 wiersze danych w <code>data.sql</code>, sprawdzone w konsoli H2. Na ocenę 5 także enum i <code>@Embeddable</code>. Relacje między tabelami dojdą na kolejnych zajęciach. Zespół pracuje razem na jednym laptopie; na koniec pokazuje przebieg w GitHub Actions.</p>
+          <div class="tags"><span class="tag">@Entity</span><span class="tag">@Column</span><span class="tag">@Enumerated</span><span class="tag">@Embeddable</span><span class="tag">data.sql</span><span class="tag">H2</span></div>
+          <a class="go" href="lab02.html">Otwórz instrukcję LAB 02 →</a>
         </div>
       </article>
       <article class="stop">
@@ -272,7 +273,7 @@
       <h2>Instrukcje do laboratoriów</h2>
       <p>Ta sama dokumentacja jest w repozytorium szablonu: otwórzcie <code>docs/index.html</code>. Wybierzcie zakładkę.</p>
     </div>
-    <div class="doc-links"><a class="doc-link" href="lab01.html"><b>LAB 01 · Start</b></a><span class="doc-link disabled" aria-disabled="true"><b>LAB 02 · Encje i relacje</b> (wkrótce)</span><a class="doc-link" href="wymagania.html"><b>Wymagania projektu</b></a><a class="doc-link" href="zasady.html"><b>Zasady zaliczenia</b></a><a class="doc-link" href="reguly.html"><b>Reguły projektu</b></a><a class="doc-link" href="pomysl.html"><b>Pomysł na projekt</b></a><a class="doc-link" href="zespol.html"><b>Praca w zespole</b></a><a class="doc-link" href="roadmapa.html"><b>Roadmapa</b></a></div>
+    <div class="doc-links"><a class="doc-link" href="lab01.html"><b>LAB 01 · Start</b></a><a class="doc-link" href="lab02.html"><b>LAB 02 · Encje i dane startowe</b></a><a class="doc-link" href="wymagania.html"><b>Wymagania projektu</b></a><a class="doc-link" href="zasady.html"><b>Zasady zaliczenia</b></a><a class="doc-link" href="reguly.html"><b>Reguły projektu</b></a><a class="doc-link" href="pomysl.html"><b>Pomysł na projekt</b></a><a class="doc-link" href="zespol.html"><b>Praca w zespole</b></a><a class="doc-link" href="roadmapa.html"><b>Roadmapa</b></a><a class="doc-link" href="https://m365ht-my.sharepoint.com/:x:/g/personal/wojciech_koszela_wroclaw_merito_pl/IQCEEPWN_2owS6zMeDfSfeG-AXpOGAC7AgOlj9SAudd8Y0w?e=S2s4H9" target="_blank" rel="noopener"><b>Arkusz zespołów</b> (Excel)</a></div>
   </section>
 
   <section id="organizacja">
@@ -286,8 +287,8 @@
         <ul>
           <li>Zespół 3 osoby</li>
           <li>Jedna osoba forkuje <code>wkoszela/WdTB-2026-Backend--projectname--</code>, zmienia nazwę na <code>WdTB-2026-Backend-&lt;nazwa&gt;</code> i dodaje resztę zespołu</li>
-          <li>Wpis w arkuszu swojej grupy (jedna osoba za cały zespół): nazwa projektu, link do repozytorium, krótki opis projektu (1–2 zdania), imię i nazwisko, nr indeksu, e-mail</li>
-          <li>Uruchomiona aplikacja: strona startowa i konsola H2</li>
+          <li>Wpis w <a href="https://m365ht-my.sharepoint.com/:x:/g/personal/wojciech_koszela_wroclaw_merito_pl/IQCEEPWN_2owS6zMeDfSfeG-AXpOGAC7AgOlj9SAudd8Y0w?e=S2s4H9" target="_blank" rel="noopener">arkuszu zespołów</a> w zakładce swojej grupy (jedna osoba za cały zespół): nazwa projektu, link do repozytorium, krótki opis projektu (1–2 zdania), imię i nazwisko, nr indeksu, e-mail</li>
+          <li>Uruchomiona aplikacja z wypełnioną wizytówką projektu na <code>localhost:8080</code>: od jej prezentacji zaczyna się LAB 02</li>
         </ul>
       </div>
       <div class="card">
@@ -303,7 +304,7 @@
         <ul>
           <li>Zadania robicie w trakcie zajęć, nie w domu</li>
           <li>Kryteria oceny prowadzący podaje na początku zajęć</li>
-          <li>Ocena na koniec zajęć, ze stanu tagu <code>lab-N</code></li>
+          <li>Ocena na koniec zajęć, na podstawie pokazanego przebiegu w GitHub Actions</li>
           <li>Jedna osoba hostuje repozytorium, wszyscy piszą kod i rozumieją cały projekt</li>
         </ul>
       </div>
@@ -316,7 +317,7 @@
       <h2>Ocena i obecności</h2>
     </div>
     <div class="grades">
-      <div class="grade"><span class="pct">70%</span><h3>Laboratorium</h3><p>Średnia ocen z laboratoriów 02–06 ze stanu repozytorium na tagach <code>lab-N</code>. LAB 01 nie jest oceniany.</p></div>
+      <div class="grade"><span class="pct">70%</span><h3>Laboratorium</h3><p>Średnia ocen z laboratoriów 02–06 na podstawie przebiegów w GitHub Actions pokazanych na zajęciach. LAB 01 nie jest oceniany.</p></div>
       <div class="grade"><span class="pct">30%</span><h3>Wykład</h3><p>Zgodnie z zasadami wykładu.</p></div>
       <div class="grade"><span class="pct">1</span><h3>Dopuszczalna nieobecność</h3><p>Każda kolejna to niezaliczony materiał, do odrobienia na LAB 07.</p></div>
     </div>

@@ -14,17 +14,17 @@
 <div class="wrap">
 <div class="top">
   <a class="logo" href="index.html"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></a>
-  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><span class="disabled" aria-disabled="true" title="Instrukcja pojawi się przed zajęciami">LAB 02</span><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html" aria-current="page">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
+  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html">LAB 02</a><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html" aria-current="page">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
 </div>
 <main class="doc"><article class="md">
 <h1>Roadmapa laboratoriów</h1>
 <p>Każde laboratorium dokłada jedną warstwę backendu, a reguły projektu rosną razem z kodem.
-Laboratoria 01–02 są rozpisane szczegółowo. Pozostałe opisują zakres i wymagania; instrukcje pojawią się przed zajęciami.
+Laboratoria 01–02 mają instrukcje. Pozostałe opisują zakres i wymagania; instrukcje pojawią się przed zajęciami.
 Wymagania laboratoriów: <a href="wymagania.html">Wymagania</a>. Zaliczenie i obecności: <a href="zasady.html">Zasady</a>.
 Pracujemy na zajęciach; kryteria oceny prowadzący podaje zawsze na początku zajęć.</p>
 <pre><code>LAB 01        LAB 02          LAB 03            LAB 04           LAB 05           LAB 06          LAB 07
 Start     →   Encje i     →   Repozytoria   →   Serwisy i    →   Kontrolery   →   Rozbudowa   →   Odrabianie
-bez oceny     relacje         i zapytania       komponenty       REST             zdarzenia,      poprawy,
+bez oceny     dane startowe   i zapytania       komponenty       REST             zdarzenia,      poprawy,
 opis pomysłu  JPA, data.sql   Spring Data       DI, transakcje   DTO, walidacja   integracje      zadania dod.
 </code></pre>
 <hr />
@@ -32,19 +32,21 @@ opis pomysłu  JPA, data.sql   Spring Data       DI, transakcje   DTO, walidacja
 <p>→ <a href="lab01.html">instrukcja LAB 01</a></p>
 <ul>
 <li>powitanie i omówienie przedmiotu: backend, baza danych, architektura warstwowa (<a href="index.html">strona główna</a>)</li>
-<li><strong>zespół i repozytorium:</strong> wpis do arkusza grupy (Excel), fork szablonu</li>
+<li><strong>zespół i repozytorium:</strong> wpis do <a href="https://m365ht-my.sharepoint.com/:x:/g/personal/wojciech_koszela_wroclaw_merito_pl/IQCEEPWN_2owS6zMeDfSfeG-AXpOGAC7AgOlj9SAudd8Y0w?e=S2s4H9" target="_blank" rel="noopener">arkusza zespołów</a> (Excel, zakładka grupy), fork szablonu</li>
 <li><strong>praca zespołu:</strong> uruchomienie aplikacji w IntelliJ, pomysł na projekt, nazwa projektu w repozytorium i kodzie, konta w <code>data.sql</code>, wizytówka na stronie startowej</li>
 <li><strong>Reguły:</strong> R1.01–R1.05</li>
 </ul>
-<h2>LAB 02 · Encje i relacje</h2>
-<p>Instrukcja pojawi się przed zajęciami.</p>
+<h2>LAB 02 · Encje i dane startowe</h2>
+<p>→ <a href="lab02.html">instrukcja LAB 02</a></p>
 <ul>
-<li><strong>na początek: prezentacja wizytówek</strong> z LAB 01 (autorzy, pomysł, zmiany)</li>
-<li>encje JPA: <code>@Entity</code>, <code>@Table</code>, <code>@Id</code>, <code>@GeneratedValue</code>, <code>@Column</code>, <code>@Enumerated</code></li>
-<li>relacje: <code>@ManyToOne</code>, <code>@OneToMany(mappedBy)</code>, <code>@ManyToMany</code> / encja łącząca, <code>@OneToOne</code>, powiązanie z <code>user_account</code></li>
+<li><strong>na początek: prezentacja wizytówek</strong> z LAB 01: zespół uruchamia aplikację i pokazuje wypełnioną wizytówkę na <code>http://localhost:8080</code> (autorzy, pomysł, zmiany)</li>
+<li>wprowadzenie: encje na przykładzie kawiarni, typy kolumn, klasa wbudowana <code>@Embeddable</code></li>
+<li>encje JPA: <code>@Entity</code>, <code>@Table</code>, <code>@Id</code>, <code>@GeneratedValue</code>, <code>@Column</code>, <code>@Enumerated(STRING)</code></li>
+<li>zadanie: 3 własne tabele z pomysłu zespołu, bez relacji, dane startowe w <code>data.sql</code>, sprawdzenie w konsoli H2</li>
 <li>typy: <code>BigDecimal</code> dla kwot, enumy jako tekst, daty</li>
-<li>konsola H2: czytanie DDL wygenerowanego przez Hibernate</li>
-<li>dane startowe w <code>data.sql</code></li>
+<li>praca zespołowa na jednym laptopie, sekcje w <code>data.sql</code></li>
+<li>konsola H2: czytanie DDL wygenerowanego przez Hibernate, <code>select</code> na każdej tabeli, pokazanie przebiegu w GitHub Actions (tag <code>lab-2</code> opcjonalnie)</li>
+<li><strong>Reguły:</strong> R2.01–R2.05 (ocena 4), R2.06–R2.07 (ocena 5: enum i <code>@Embeddable</code>)</li>
 </ul>
 <h2>LAB 03 · Repozytoria i zapytania</h2>
 <ul>

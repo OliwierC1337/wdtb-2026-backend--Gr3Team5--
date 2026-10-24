@@ -188,3 +188,18 @@ main.doc { margin-top: 28px; }
 .hero-author { font-size: 14px; color: var(--muted); }
 nav.jump .disabled, .doc-link.disabled { opacity: .45; cursor: not-allowed; }
 nav.jump .disabled { font: 500 13px/1 var(--font-body); color: var(--ink); padding: 8px 11px; border-radius: 999px; border: 1px dashed var(--line); background: var(--surface); }
+
+/* Instrukcje laboratoriów: teoria a zadanie */
+.md .part { display: block; min-width: 0; margin-top: 30px; padding: 4px 0 4px 18px; border-left: 4px solid var(--ok); }
+.md .part > * { margin-block: 0; }
+.md .part > * + * { margin-top: 14px; }
+.md .part > h3 { margin-top: 24px; }
+.md .part > h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.md .part.theory { border-left-color: var(--blue); background: var(--bg); border-radius: 0 12px 12px 0; padding: 18px 20px; }
+.md .part.theory .tbl table, .md .part.theory pre { background: var(--surface); }
+.md .tag { display: inline-block; vertical-align: middle; margin-right: 8px; padding: 2px 9px; border-radius: 999px;
+  font: 600 12px/1.5 var(--font-body); letter-spacing: .04em; text-transform: uppercase; border: 1px solid currentColor; }
+.md .tag.theory { color: var(--blue); }
+.md .tag.task { color: var(--ok); }
+.md .legend { color: var(--muted); font-size: 14.5px; }
+@media (max-width: 560px) { .md .part { padding-left: 12px; } .md .part.theory { padding: 14px 12px; } }

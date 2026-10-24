@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LAB 02 · Encje i dane startowe · Wprowadzenie do technologii backendowych</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('wdtb-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+<div class="wrap">
+<div class="top">
+  <a class="logo" href="index.html"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></a>
+  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html" aria-current="page">LAB 02</a><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
+</div>
+<main class="doc"><article class="md">
+<h1>LAB 02 · Encje i dane startowe: pierwsze tabele projektu</h1>
+<blockquote>
+<p><strong>Zajęcia są oceniane.</strong> Ocenę wystawia prowadzący na koniec zajęć na podstawie przebiegu w GitHub Actions,
+który zespół mu pokazuje (krok G).
+Zielony etap „Ocena 4” (reguły R2.01–R2.05) to warunek konieczny. Na ocenę 5 zielony musi być też etap „Ocena 5”
+(R2.06–R2.07: kolumna enum i klasa <code>@Embeddable</code>). Szczegóły w części G.</p>
+<p><strong>Pracujemy na zajęciach, nie w domu.</strong> Na koniec zajęć projekt ma <strong>3 własne tabele z Waszego pomysłu</strong> jako encje JPA,
+<strong>przykładowe dane</strong> w każdej z nich (polecenia <code>insert</code> w <code>data.sql</code>) i sprawdzone wiersze w konsoli H2. Relacji między tabelami jeszcze nie dodajecie.</p>
+<p><strong>Pracujemy na jednym laptopie.</strong> Zespół siada przy komputerze osoby hostującej, jak na LAB 01.
+Pracujecie razem nad każdą tabelą (krok C3).</p>
+</blockquote>
+<blockquote>
+<p><strong>Od tego zaczynamy.</strong> Każdy zespół uruchamia aplikację w IntelliJ i pokazuje na <strong>http://localhost:8080</strong>
+wizytówkę projektu z LAB 01. Wizytówka musi już być w repozytorium zespołu na GitHubie, nie tylko na jednym komputerze.</p>
+</blockquote>
+<p>Materiały: wykład JPA z części wykładowej przedmiotu (encje, adnotacje, relacje) oraz
+<a href="index.html">strona główna dokumentacji</a> (sekcja „JPA i Hibernate”, diagram warstw).
+Aktualna dokumentacja: <a href="https://wkoszela.github.io/WdTB-2026-Backend--projectname--/" target="_blank" rel="noopener">wkoszela.github.io/WdTB-2026-Backend--projectname--</a>.
+Te same strony są w katalogu <code>docs/</code> po pobraniu nowych materiałów (krok C1).</p>
+<h2>Plan zajęć</h2>
+<p class="legend"><span class="tag theory">Teoria</span>do przeczytania i omówienia, nic nie zmieniacie w kodzie. <span class="tag task">Zadanie</span>wykonujecie w IntelliJ i na GitHubie.</p>
+<ol class="agenda">
+<li><span class="tag task">Zadanie</span><strong>A · Prezentacja wizytówek:</strong> każdy zespół, 2–3 minuty</li>
+<li><span class="tag theory">Teoria</span><strong>B · Wprowadzenie:</strong> encje na przykładzie kawiarni, typy kolumn, <code>@Embeddable</code></li>
+<li><span class="tag task">Zadanie</span><strong>C · Aktualizacja projektu:</strong> nowe materiały, <code>lab=2</code>, podział pracy w zespole</li>
+<li><span class="tag task">Zadanie</span><strong>D · Wybór tabel:</strong> 3 tabele bez relacji z Waszego pomysłu</li>
+<li><span class="tag task">Zadanie</span><strong>E · Encje Waszego projektu:</strong> 3 własne tabele, praca całego zespołu</li>
+<li><span class="tag task">Zadanie</span><strong>F · Przykładowe dane:</strong> <code>insert</code> do każdej tabeli w <code>data.sql</code>, sprawdzenie w konsoli H2</li>
+<li><span class="tag task">Zadanie</span><strong>G · Reguły, commit, pokazanie przebiegu</strong></li>
+</ol>
+<section class="part task">
+<h2><span class="tag task">Zadanie</span>A · Prezentacja wizytówek</h2>
+<p>Zespoły prezentują po kolei. Zespół uruchamia aplikację (zielona strzałka obok <code>main</code> w klasie
+<code>&lt;NazwaProjektu&gt;Application</code>) i otwiera <strong>http://localhost:8080</strong>. Na stronie nie może zostać
+żaden znacznik <code>[uzupełnij]</code>. Na podstawie wizytówki zespół przedstawia:</p>
+<ol>
+<li><strong>autorów pomysłu:</strong> każda osoba mówi krótko o sobie (kim jest, czym się interesuje, co już potrafi),</li>
+<li><strong>pomysł:</strong> problem, dla kogo jest rozwiązanie, trzy najważniejsze funkcje,</li>
+<li><strong>zmiany wprowadzone na LAB 01.</strong></li>
+</ol>
+</section>
+<section class="part theory">
+<h2><span class="tag theory">Teoria</span>B · Wprowadzenie: encje, typy kolumn, @Embeddable</h2>
+<h3>B1. Encja to klasa, która opisuje tabelę</h3>
+<p>Na LAB 01 widzieliście w oknie <em>Run</em> polecenie <code>create table user_account</code>. Hibernate wygenerował je
+z klasy <code>UserAccount</code>. Tak działa JPA: <strong>klasa ↔ tabela, pole ↔ kolumna, obiekt ↔ wiersz</strong>.
+Otwórzcie <code>account/domain/UserAccount.java</code> i porównajcie z tabelą w konsoli H2:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Adnotacja</th>
+<th>Znaczenie</th>
+<th>W <code>UserAccount</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@Entity</code></td>
+<td>klasa jest encją: Hibernate tworzy dla niej tabelę</td>
+<td>nad klasą</td>
+</tr>
+<tr>
+<td><code>@Table(name = "…")</code></td>
+<td>nazwa tabeli w bazie (małe litery, podkreślenia)</td>
+<td><code>user_account</code></td>
+</tr>
+<tr>
+<td><code>@Id</code> + <code>@GeneratedValue(strategy = IDENTITY)</code></td>
+<td>klucz główny; numer nadaje baza (1, 2, 3…)</td>
+<td><code>Long id</code></td>
+</tr>
+<tr>
+<td><code>@Column(name, nullable, unique, length)</code></td>
+<td>nazwa i ograniczenia kolumny</td>
+<td><code>email</code>: wymagany, unikalny, 120 znaków</td>
+</tr>
+<tr>
+<td><code>@Enumerated(EnumType.STRING)</code></td>
+<td>enum zapisany jako tekst (<code>'ADMIN'</code>), a nie numer pozycji</td>
+<td><code>AccountRole role</code></td>
+</tr>
+<tr>
+<td>konstruktor <code>protected</code> bez argumentów</td>
+<td>wymaga go Hibernate; drugi, publiczny, służy Wam</td>
+<td><code>protected UserAccount() {}</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3>B2. Typy kolumn</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Dane</th>
+<th>Typ pola w Javie</th>
+<th>Uwagi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tekst</td>
+<td><code>String</code></td>
+<td>zawsze z <code>length</code>, np. 60 lub 120</td>
+</tr>
+<tr>
+<td>liczby całkowite, ilości</td>
+<td><code>Integer</code>, <code>Long</code></td>
+<td>liczba miejsc, sztuk, punktów</td>
+</tr>
+<tr>
+<td>kwoty, ceny, oceny dziesiętne</td>
+<td><code>BigDecimal</code></td>
+<td><strong>nigdy <code>double</code> ani <code>float</code></strong>: <code>0.1 + 0.2</code> daje <code>0.30000000000000004</code>;
+   kolumna <code>precision = 10, scale = 2</code></td>
+</tr>
+<tr>
+<td>data, data z godziną</td>
+<td><code>LocalDate</code>, <code>LocalDateTime</code></td>
+<td>w <code>data.sql</code>: <code>'2026-11-14'</code>, <code>'2026-11-14 18:00:00'</code></td>
+</tr>
+<tr>
+<td>status, typ, kategoria ze stałej listy</td>
+<td><code>enum</code></td>
+<td>zawsze z <code>@Enumerated(EnumType.STRING)</code></td>
+</tr>
+<tr>
+<td>tak / nie</td>
+<td><code>Boolean</code></td>
+<td>np. <code>active</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3>B3. Przykład: trzy encje kawiarni</h3>
+<p>Tak wyglądają trzy tabele bez relacji dla kawiarni z LAB 01. To wzór: Wy w części E tworzycie tabele <strong>ze swojego projektu</strong>.
+Każda encja leży w pakiecie swojego modułu: <code>seating.entity</code>, <code>menu.entity</code>, <code>guest.entity</code>.</p>
+<p><strong>Stolik</strong>, klasa <code>CafeTable</code> (nazwa <code>Table</code> jest zajęta przez adnotację JPA):</p>
+<pre><code>package pl.wsb.kawiarnia.seating.entity;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "cafe_table")
+public class CafeTable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "number", nullable = false, unique = true)
+    private Integer number;
+
+    @Column(name = "seats", nullable = false)
+    private Integer seats;
+
+    @Column(name = "room", nullable = false, length = 40)
+    private String room;
+
+    @Column(name = "active", nullable = false)
+    private Boolean active;                  // stolik w użyciu
+
+    protected CafeTable() {
+    }
+
+    public CafeTable(Integer number, Integer seats, String room, Boolean active) {
+        this.number = number;
+        this.seats = seats;
+        this.room = room;
+        this.active = active;
+    }
+
+    // gettery: Code → Generate… → Getter → zaznaczcie wszystkie pola
+}
+</code></pre>
+<p>Hibernate generuje z tej klasy:</p>
+<pre><code>create table cafe_table (
+    active boolean not null,
+    number integer not null unique,
+    seats integer not null,
+    id bigint generated by default as identity,
+    room varchar(40) not null,
+    primary key (id)
+)
+</code></pre>
+<p><strong>Pozycja menu</strong> ma kategorię ze stałej listy (enum) i cenę (kwota). Najpierw enum <code>MenuCategory</code>:</p>
+<pre><code>package pl.wsb.kawiarnia.menu.entity;
+
+public enum MenuCategory {
+    COFFEE, TEA, CAKE
+}
+</code></pre>
+<p>Potem encja <code>MenuItem</code>:</p>
+<pre><code>@Entity
+@Table(name = "menu_item")
+public class MenuItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", nullable = false, unique = true, length = 60)
+    private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false, length = 20)
+    private MenuCategory category;
+
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
+
+    @Column(name = "available", nullable = false)
+    private Boolean available;
+
+    protected MenuItem() {
+    }
+
+    // konstruktor z polami i gettery: Code → Generate…
+}
+</code></pre>
+<p>W logu enum jest tekstem, a cena liczbą z dwoma miejscami po przecinku. Z <code>double</code> byłoby <code>float(53)</code>,
+czyli zaokrąglenia przy każdym dodawaniu:</p>
+<pre><code>create table menu_item (
+    available boolean not null,
+    price numeric(10,2) not null,
+    id bigint generated by default as identity,
+    name varchar(60) not null unique,
+    category enum ('CAKE','COFFEE','TEA') not null,
+    primary key (id)
+)
+</code></pre>
+<p><strong>Gość</strong>, klasa <code>Guest</code>, ma datę i kolumnę opcjonalną: telefon nie jest wymagany, więc nie ma <code>nullable = false</code>.
+Adres to osobna klasa wbudowana, opisana w B4:</p>
+<pre><code>@Entity
+@Table(name = "guest")
+public class Guest {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "full_name", nullable = false, length = 80)
+    private String fullName;
+
+    @Column(name = "phone", length = 20)
+    private String phone;
+
+    @Column(name = "registered_on", nullable = false)
+    private LocalDate registeredOn;
+
+    @Embedded
+    private Address address;               // klasa wbudowana z B4
+
+    protected Guest() {
+    }
+
+    // konstruktor z polami i gettery: Code → Generate…
+}
+</code></pre>
+<p>Dane startowe dla tych trzech tabel w <code>data.sql</code>:</p>
+<pre><code>-- ===== LAB 02 · cafe_table =====
+insert into cafe_table (number, seats, room, active) values
+    (1, 2, 'sala główna', true),
+    (2, 4, 'sala główna', true),
+    (3, 6, 'ogródek',     false);
+
+-- ===== LAB 02 · menu_item =====
+insert into menu_item (name, category, price, available) values
+    ('Espresso',        'COFFEE',  9.00, true),
+    ('Herbata zielona', 'TEA',    11.50, true),
+    ('Sernik',          'CAKE',   16.00, false);
+
+-- ===== LAB 02 · guest =====
+insert into guest (full_name, phone, registered_on, street, city, postal_code) values
+    ('Anna Kowalska',  '600100200', '2026-10-01', 'Ruska 12',      'Wrocław', '50-079'),
+    ('Jan Nowak',      null,        '2026-10-12', null,            null,      null),
+    ('Ewa Wiśniewska', '600500600', '2026-10-20', 'Świdnicka 3/4', 'Wrocław', '50-066');
+</code></pre>
+<h3>B4. Klasa wbudowana: @Embeddable</h3>
+<p>Czasem kilka kolumn tworzy całość, np. adres: ulica, miasto, kod pocztowy. Zamiast trzech luźnych pól w encji
+tworzy się małą klasę z <code>@Embeddable</code> i używa jej w encji jako pola z <code>@Embedded</code>.
+Klasa wbudowana <strong>nie jest osobną tabelą</strong>: jej kolumny trafiają do tabeli encji, która jej używa.</p>
+<pre><code>@Embeddable
+public class Address {
+
+    @Column(name = "street", length = 80)
+    private String street;
+
+    @Column(name = "city", length = 40)
+    private String city;
+
+    @Column(name = "postal_code", length = 6)
+    private String postalCode;
+
+    protected Address() {
+    }
+}
+</code></pre>
+<p>W encji <code>Guest</code> wystarczy pole <code>@Embedded private Address address;</code>. Hibernate tworzy jedną tabelę <code>guest</code>,
+w której są też kolumny adresu:</p>
+<pre><code>create table guest (
+    registered_on date not null,
+    postal_code varchar(6),
+    id bigint generated by default as identity,
+    phone varchar(20),
+    city varchar(40),
+    full_name varchar(80) not null,
+    street varchar(80),
+    primary key (id)
+)
+</code></pre>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th><code>@Entity</code></th>
+<th><code>@Embeddable</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>własna tabela</td>
+<td>tak</td>
+<td>nie, kolumny w tabeli encji</td>
+</tr>
+<tr>
+<td>własne <code>id</code></td>
+<td>tak</td>
+<td>nie</td>
+</tr>
+<tr>
+<td>przykłady</td>
+<td>stolik, produkt, klient</td>
+<td>adres, okres od–do, kwota z walutą, dane kontaktowe</td>
+</tr>
+</tbody>
+</table></div>
+<p>Klasa <code>@Embeddable</code> leży w tym samym pakiecie <code>&lt;moduł&gt;.entity</code> co encja (R2.02). Nie liczy się jako jedna z 3 tabel, ale jej kolumny liczą się do kolumn tabeli encji (R2.04). Na ocenę 5 co najmniej jedna encja ma pole <code>@Embedded</code> (R2.07).</p>
+</section>
+<section class="part task">
+<h2><span class="tag task">Zadanie</span>C · Aktualizacja projektu</h2>
+<h3>C1. Nowe materiały z szablonu</h3>
+<p>Przed zajęciami w szablonie pojawiły się instrukcja LAB 02 i reguły R2.01–R2.07. Pobieracie je do forka:</p>
+<ol>
+<li>Na stronie forka na GitHubie: <strong>Sync fork → Update branch</strong>.</li>
+<li>Na laptopie w IntelliJ: <em>Git → Pull</em>.</li>
+</ol>
+<blockquote>
+<p><strong>Gdy GitHub pokaże konflikt przy Sync fork:</strong> nie klikajcie <em>Discard commits</em>, to usunęłoby Waszą pracę z LAB 01.
+Zgłoście to prowadzącemu; rozwiążecie to razem w IntelliJ. Konflikt zdarza się tylko wtedy, gdy zespół zmienił plik, który
+zmienił się też w szablonie (np. <code>README.md</code>). Prowadzący nie zmienia w szablonie plików, które edytujecie
+zgodnie z instrukcją: <code>pom.xml</code>, <code>data.sql</code>, <code>static/index.html</code> ani Waszych pakietów.
+Dlatego przy tych plikach konfliktu nie będzie.</p>
+</blockquote>
+<h3>C2. Włączenie reguł LAB 02</h3>
+<p>W <code>pom.xml</code> zmieńcie <code>&lt;lab&gt;1&lt;/lab&gt;</code> na <code>&lt;lab&gt;2&lt;/lab&gt;</code>
+i od razu wyślijcie zmianę: <em>Git → Commit</em> z opisem „LAB 02: reguły”, potem <em>Push</em>.</p>
+<p>Od tej chwili <em>Maven → Lifecycle → verify</em> uruchamia też reguły LAB 02. Na starcie wszystkie są czerwone: to lista zadań na dziś.</p>
+<h3>C3. Praca na jednym laptopie</h3>
+<p>Wszyscy pracujecie na tej samej kopii projektu, więc konfliktów między Wami nie będzie.</p>
+<ol>
+<li><strong>Praca zespołowa.</strong> Tabele wymyślacie i piszecie razem. Kto siedzi przy klawiaturze, ustalacie sami;
+   pozostałe osoby podpowiadają i sprawdzają z instrukcją.</li>
+<li><strong>Małe commity.</strong> Po każdej działającej encji: uruchomienie aplikacji, <em>Commit</em>, <em>Push</em>.</li>
+<li><strong><code>data.sql</code> ma sekcje.</strong> Na początku części F dopiszcie nagłówek sekcji dla każdej tabeli:
+<pre><code>-- ===== LAB 02 · &lt;tabela 1&gt; =====
+
+-- ===== LAB 02 · &lt;tabela 2&gt; =====
+
+-- ===== LAB 02 · &lt;tabela 3&gt; =====
+</code></pre></li>
+<li><strong>Nikt nie edytuje</strong> <code>src/test/java/pl/wsb/rules</code> ani <code>.github/workflows</code>.</li>
+</ol>
+</section>
+<section class="part task">
+<h2><span class="tag task">Zadanie</span>D · Wybór tabel</h2>
+<p>Na podstawie tematu Waszego projektu sami wybierzcie <strong>3 tabele</strong>. Jeśli któraś tabela powinna wskazywać na inną
+(np. rezerwacja na stolik), na razie <strong>nie budujcie relacji</strong>: pomińcie kolumnę klucza obcego, dojdzie na kolejnych zajęciach.
+Dla każdej tabeli ustalcie:</p>
+<ol>
+<li><strong>nazwę klasy i tabeli</strong> po angielsku, np. <code>MenuItem</code> i <code>menu_item</code>,</li>
+<li><strong>co najmniej 4 kolumny poza <code>id</code></strong> z typami z części B2 (R2.04), w tym co najmniej jedna wymagana,
+   czyli z <code>nullable = false</code> (R2.05),</li>
+<li><strong>moduł</strong>, czyli pakiet, do którego trafi encja: jedno słowo, małe litery, po angielsku, np. <code>menu</code>,</li>
+<li><strong>co najmniej 3 przykładowe wiersze</strong>, sensowne dla Waszego tematu: wpiszecie je w części F (R2.03).</li>
+</ol>
+<p><strong>Na ocenę 5</strong> dodatkowo: w co najmniej jednej tabeli kolumna typu enum z <code>@Enumerated(EnumType.STRING)</code>, np. status albo kategoria (R2.06),
+i w co najmniej jednej tabeli klasa wbudowana <code>@Embeddable</code>, np. adres albo okres od–do (R2.07). Wzór w częściach B3 i B4.</p>
+<p>Nie rysujecie schematu, od razu piszecie kod.</p>
+</section>
+<section class="part task">
+<h2><span class="tag task">Zadanie</span>E · Encje Waszego projektu</h2>
+<p>Tworzycie <strong>własne</strong> 3 tabele z części D. Wzorem są encje kawiarni z części B3. Nazwy klas, pól i pakietów
+po angielsku, jak w <code>UserAccount</code>. Pracujecie razem całym zespołem (C3).</p>
+<h3>E1. Pakiety modułów</h3>
+<p>Prawy przycisk na pakiecie <code>pl.wsb.&lt;projekt&gt;</code> → <em>New → Package</em> → wpiszcie <code>&lt;moduł&gt;.entity</code>,
+np. <code>menu.entity</code> (IntelliJ utworzy oba poziomy). Tak samo dla pozostałych modułów z części D (R2.02).
+Gotowa klasa <code>UserAccount</code> zostaje w <code>account.domain</code>.</p>
+<h3>E2. Enum (na ocenę 5 w co najmniej jednej tabeli)</h3>
+<p>Prawy przycisk na <code>&lt;moduł&gt;.entity</code> → <em>New → Java Class</em> → <em>Enum</em> → nazwa, np. <code>Category</code> albo <code>Status</code>.
+Stałe wielkimi literami, jak <code>MenuCategory</code> w B3. W encji pole enum zawsze z <code>@Enumerated(EnumType.STRING)</code> (R2.06).
+Na ocenę 4 ten krok możecie pominąć.</p>
+<h3>E3. Encja</h3>
+<p>Prawy przycisk na <code>&lt;moduł&gt;.entity</code> → <em>New → Java Class</em> → nazwa klasy. Szkielet, który uzupełniacie swoimi kolumnami:</p>
+<pre><code>package pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.entity;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "&lt;nazwa_tabeli&gt;")
+public class &lt;NazwaKlasy&gt; {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "&lt;kolumna&gt;", nullable = false, length = 60)
+    private String &lt;pole&gt;;
+
+    // co najmniej 4 kolumny poza id: typy z części B2, enum z @Enumerated(EnumType.STRING), kwoty w BigDecimal
+
+    protected &lt;NazwaKlasy&gt;() {
+    }
+}
+</code></pre>
+<ul>
+<li><strong>Czerwona adnotacja:</strong> <em>Alt+Enter → Import class</em> (pakiet <code>jakarta.persistence</code>).</li>
+<li><strong>Konstruktor z polami i gettery:</strong> <em>Code → Generate…</em> (macOS <kbd>⌘N</kbd>, Windows <kbd>Alt+Insert</kbd>). Setterów nie generujcie.</li>
+<li><strong>Grupa kolumn</strong>, np. adres: klasa <code>@Embeddable</code> jak w B4. Na ocenę 4 opcjonalna, na ocenę 5 wymagana w co najmniej jednej tabeli (R2.07).</li>
+</ul>
+<h3>E4. Sprawdzenie i commit</h3>
+<ol>
+<li><em>Rerun</em> w oknie <em>Run</em>. W logu znajdźcie <code>create table &lt;nazwa_tabeli&gt;</code> i sprawdźcie kolumny i typy.</li>
+<li><em>Git → Commit</em> z opisem, np. „Encja pozycji menu”, potem <em>Push</em>.</li>
+<li>Kolejna tabela: znowu od kroku E2.</li>
+</ol>
+</section>
+<section class="part task">
+<h2><span class="tag task">Zadanie</span>F · Dane startowe i konsola H2</h2>
+<h3>F1. Przykładowe dane: insert w data.sql</h3>
+<p>Hibernate tworzy tabele od nowa przy każdym starcie, a potem Spring Boot wykonuje <code>src/main/resources/data.sql</code>.
+Do <strong>każdej</strong> Waszej tabeli dopiszcie polecenie <code>insert</code> z co najmniej 3 przykładowymi wierszami, w sekcji tej tabeli (C3)
+na końcu pliku, pod kontami z LAB 01. Wzór jest w części B3. Zasady:</p>
+<ul>
+<li><strong>Bez <code>id</code>:</strong> baza numeruje wiersze sama, od 1.</li>
+<li><strong>Nazwy kolumn</strong> dokładnie jak w <code>@Column(name)</code>; enumy jako tekst w apostrofach (np. <code>'COFFEE'</code>);
+   daty jako <code>'2026-10-01'</code>; kwoty z kropką (<code>9.00</code>).</li>
+<li><strong>Dane sensowne dla Waszego tematu</strong>, nie „test1”, „test2”. Reguła R2.03 sprawdza, że każda tabela ma co najmniej 3 wiersze.</li>
+</ul>
+<pre><code>-- ===== LAB 02 · &lt;nazwa_tabeli&gt; =====
+insert into &lt;nazwa_tabeli&gt; (&lt;kolumna1&gt;, &lt;kolumna2&gt;, &lt;kolumna3&gt;) values
+    (…, …, …),
+    (…, …, …),
+    (…, …, …);
+</code></pre>
+<h3>F2. Sprawdzenie w konsoli H2</h3>
+<p>Po <em>Rerun</em> otwórzcie <strong>http://localhost:8080/h2-console</strong> (JDBC URL <code>jdbc:h2:file:./data/wdtb</code>,
+użytkownik <code>sa</code>, hasło puste). Po lewej stronie jest lista tabel: rozwińcie każdą swoją tabelę i sprawdźcie kolumny.
+Potem dla każdej tabeli wykonajcie <code>select</code> i porównajcie wiersze z <code>data.sql</code>:</p>
+<pre><code>select * from &lt;nazwa_tabeli&gt;;
+</code></pre>
+<p>Na przykładzie kawiarni: <code>select * from menu_item;</code> albo z warunkiem
+<code>select name, price from menu_item where category = 'COFFEE' order by price;</code></p>
+<p>Każda tabela ma pokazać tyle wierszy, ile wpisaliście. Pusta tabela oznacza brak sekcji w <code>data.sql</code> albo literówkę w nazwie tabeli.</p>
+<h3>F3. Typowe błędy przy starcie</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Komunikat w logu</th>
+<th>Przyczyna i poprawka</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Column "…" not found</code></td>
+<td>nazwa kolumny w <code>insert</code> różni się od <code>@Column(name)</code></td>
+</tr>
+<tr>
+<td><code>Table "…" not found</code></td>
+<td>klasa bez <code>@Entity</code> albo poza pakietem <code>pl.wsb.&lt;projekt&gt;</code>; inna nazwa w <code>@Table(name)</code></td>
+</tr>
+<tr>
+<td><code>NULL not allowed for column "…"</code></td>
+<td>kolumna z <code>nullable = false</code> pominięta w <code>insert</code></td>
+</tr>
+<tr>
+<td><code>Unique index or primary key violation</code></td>
+<td>dwa wiersze z tą samą wartością kolumny <code>unique</code> (np. numer stolika, nazwa pozycji menu)</td>
+</tr>
+<tr>
+<td><code>No default constructor for entity</code></td>
+<td>brak konstruktora <code>protected &lt;Klasa&gt;() {}</code></td>
+</tr>
+<tr>
+<td><code>Port 8080 was already in use</code></td>
+<td>poprzednie uruchomienie wciąż działa: czerwony kwadrat w oknie <em>Run</em></td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p>Błąd w <code>data.sql</code> zatrzymuje start aplikacji, więc czerwone są też R1.02 i R2.03. Czytajcie log od pierwszej linii
+z <code>Caused by</code>: tam jest nazwa tabeli i kolumny.</p>
+</blockquote>
+</section>
+<section class="part task">
+<h2><span class="tag task">Zadanie</span>G · Reguły, commit, pokazanie przebiegu</h2>
+<ol>
+<li><strong>Reguły lokalnie:</strong> panel <em>Maven</em> (prawa krawędź okna) → <em>Lifecycle</em> → dwuklik na <em>verify</em>.
+   W oknie <em>Run</em> przy każdej regule R2.xx jest zielony albo czerwony znak, a przy czerwonej opis, co poprawić.
+   Poprawiacie, aż LAB 01 i LAB 02 są zielone. Zestaw „LAB 02 · na ocenę 5” (R2.06–R2.07) jest potrzebny tylko na ocenę 5.</li>
+<li><strong>Ostatnie zmiany:</strong> <em>Commit</em> z opisem (np. „Poprawki po regułach LAB 02”), <em>Push</em>.
+   Na GitHubie zakładka <em>Actions</em> → przebieg „Testy i reguły” ma dwa etapy:
+   <strong>Ocena 4 · reguły obowiązkowe</strong> (musi być zielony) i <strong>Ocena 5 · warunki dodatkowe</strong>
+   (uruchamia się po zielonym etapie „Ocena 4”). Przy czerwonym etapie w <em>Summary</em> jest lista reguł do poprawy.</li>
+<li><strong>Wizytówka:</strong> w <code>static/index.html</code> dopiszcie do listy zmian, co powstało na LAB 02 (nazwy tabel),
+   potem <em>Commit</em> i <em>Push</em>. Od tego zaczniecie prezentację na kolejnych zajęciach.</li>
+<li><strong>Pokazanie przebiegu (obowiązkowe):</strong> gdy wszystkie zmiany są na GitHubie, pokażcie prowadzącemu w zakładce
+   <em>Actions</em> przebieg „Testy i reguły” dla ostatniego commita na <code>main</code>: oba etapy i <em>Summary</em>.
+   Jeśli przebiegu nie ma albo dotyczy starszego commita, uruchomcie go ręcznie: <em>Actions</em> → <em>Testy i reguły</em> → <em>Run workflow</em> → gałąź <code>main</code>, w polu „Numer laboratorium” wpiszcie <code>2</code> → <em>Run workflow</em>.</li>
+<li><strong>Tag <code>lab-2</code> (opcjonalnie):</strong> zaznacza wersję do oceny. Okno <em>Git</em> → zakładka <em>Log</em> →
+   prawy przycisk na ostatnim commicie → <em>New Tag…</em> → nazwa <code>lab-2</code>, potem <em>Git → Push</em> z zaznaczonym
+   <em>Push Tags</em>. Tag sam uruchamia przebieg z regułami LAB 02.</li>
+</ol>
+<p>Prowadzący ocenia na podstawie pokazanego przebiegu:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Ocena</th>
+<th>Warunek</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>4</strong></td>
+<td>zielony etap „Ocena 4 · reguły obowiązkowe” (R2.01–R2.05 i reguły LAB 01)</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>dodatkowo zielony etap „Ocena 5 · warunki dodatkowe”: kolumna enum (R2.06) i klasa <code>@Embeddable</code> (R2.07)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Przy każdej ocenie liczą się też zgodność tabel z pomysłem z wizytówki, sensowne dane startowe i rozmowa:
+każda osoba potrafi wyjaśnić dowolną encję zespołu.</p>
+<h3>Reguły LAB 02</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Co sprawdza</th>
+<th>Wymagane na ocenę</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R2.01</td>
+<td>co najmniej 3 własne encje (<code>@Entity</code>) poza <code>UserAccount</code></td>
+<td>4 i 5</td>
+</tr>
+<tr>
+<td>R2.02</td>
+<td>encje i <code>@Embeddable</code> leżą w pakietach <code>pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.entity</code></td>
+<td>4 i 5</td>
+</tr>
+<tr>
+<td>R2.03</td>
+<td>aplikacja startuje na czystej bazie, a każda własna tabela ma co najmniej 3 wiersze z <code>data.sql</code></td>
+<td>4 i 5</td>
+</tr>
+<tr>
+<td>R2.04</td>
+<td>każda własna tabela ma co najmniej 4 kolumny poza <code>id</code> (kolumny klasy <code>@Embedded</code> się liczą)</td>
+<td>4 i 5</td>
+</tr>
+<tr>
+<td>R2.05</td>
+<td>każda własna tabela ma co najmniej jedną kolumnę wymaganą (<code>nullable = false</code>)</td>
+<td>4 i 5</td>
+</tr>
+<tr>
+<td>R2.06</td>
+<td>co najmniej jedna własna tabela ma kolumnę typu enum, a każde pole enum ma <code>@Enumerated(EnumType.STRING)</code></td>
+<td>5</td>
+</tr>
+<tr>
+<td>R2.07</td>
+<td>co najmniej jedna własna tabela ma pole <code>@Embedded</code> typu klasy <code>@Embeddable</code></td>
+<td>5</td>
+</tr>
+</tbody>
+</table></div>
+<p>Reguły są generyczne: patrzą na adnotacje i pakiety, nie na nazwy Waszych tabel. Gdy coś jest czerwone, komunikat przy regule
+mówi, którą klasę lub tabelę poprawić.</p>
+</section>
+</article></main>
+
+<footer>
+  <span>Wprowadzenie do technologii backendowych · laboratoria</span>
+  <span class="author">Materiały przygotował: <b>Wojciech Koszela</b>, prowadzący<a class="social li" href="https://www.linkedin.com/in/wkoszela/" target="_blank" rel="noopener" aria-label="Wojciech Koszela na LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a><a class="social gh" href="https://github.com/wkoszela" target="_blank" rel="noopener" aria-label="wkoszela na GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a><a class="social mail" href="mailto:wojciech.koszela@wroclaw.merito.pl" aria-label="E-mail do prowadzącego"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5v-13zm2.2.5 7.8 6.1L19.8 6H4.2zM20 7.9l-7.4 5.8a1 1 0 0 1-1.2 0L4 7.9V18h16V7.9z"/></svg>wojciech.koszela@wroclaw.merito.pl</a></span>
+  <span class="logo"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></span>
+</footer>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, btn = document.querySelector('.theme-toggle');
+  if (!btn) return;
+  function current() {
+    return root.getAttribute('data-theme') ||
+      (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  }
+  function label() { btn.textContent = current() === 'dark' ? '☀ Jasny' : '☾ Ciemny'; }
+  btn.addEventListener('click', function () {
+    var next = current() === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('wdtb-theme', next); } catch (e) {}
+    label();
+  });
+  label();
+})();
+</script>
+</body>
+</html>

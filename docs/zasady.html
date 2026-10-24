@@ -14,7 +14,7 @@
 <div class="wrap">
 <div class="top">
   <a class="logo" href="index.html"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></a>
-  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><span class="disabled" aria-disabled="true" title="Instrukcja pojawi się przed zajęciami">LAB 02</span><a href="wymagania.html">Wymagania</a><a href="zasady.html" aria-current="page">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
+  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html">LAB 02</a><a href="wymagania.html">Wymagania</a><a href="zasady.html" aria-current="page">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
 </div>
 <main class="doc"><article class="md">
 <h1>Zasady zaliczenia</h1>
@@ -22,7 +22,7 @@
 <ul>
 <li>Zadania z danego laboratorium wykonujecie <strong>na zajęciach</strong>, nie w domu.</li>
 <li><strong>Kryteria oceny prowadzący podaje na początku każdego laboratorium.</strong></li>
-<li>Ocenę wystawia prowadzący <strong>na koniec zajęć</strong>, ze stanu repozytorium na tagu <code>lab-N</code> zrobionym w trakcie zajęć.</li>
+<li>Ocenę wystawia prowadzący <strong>na koniec zajęć</strong>, na podstawie przebiegu „Testy i reguły” w GitHub Actions, który zespół pokazuje (ostatni push na <code>main</code> albo uruchomienie ręczne <em>Run workflow</em>). Tag <code>lab-N</code> jest opcjonalny.</li>
 <li>Czego nie skończycie na zajęciach, nadrabiacie na ostatnich zajęciach (LAB 07).</li>
 </ul>
 <h2>Obecność</h2>
@@ -44,7 +44,7 @@
 <ul>
 <li>LAB 01 <strong>nie jest oceniany</strong> (konfiguracja i szkic pomysłu).</li>
 <li>Oceniane są laboratoria <strong>02–06</strong>. Ocena z laboratorium to średnia z tych pięciu ocen.</li>
-<li>Każde laboratorium oceniane jest ze stanu repozytorium na tagu <code>lab-N</code>: zielone „Testy i reguły” to warunek konieczny.</li>
+<li>Każde laboratorium oceniane jest na podstawie pokazanego przebiegu: zielony etap „Ocena 4” w przebiegu „Testy i reguły” to warunek konieczny, a etap „Ocena 5” sprawdza warunki na ocenę 5.</li>
 </ul>
 <h2>Ocena końcowa z przedmiotu</h2>
 <div class="tbl"><table>

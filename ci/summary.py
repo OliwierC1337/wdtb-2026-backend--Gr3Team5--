@@ -1,6 +1,7 @@
 """Podsumowanie reguł projektu i testów zespołu w formacie Markdown (zakładka Summary w GitHub Actions)."""
 import glob
 import html
+import sys
 import xml.etree.ElementTree as ET
 
 
@@ -16,7 +17,8 @@ for path in sorted(glob.glob("target/surefire-reports/TEST-*.xml")):
     skipped = [c for c in cases if c.find("skipped") is not None]
     suites.append((root.get("name", path), len(cases), failed, skipped))
 
-print("## Reguły projektu i testy zespołu\n")
+TITLE = sys.argv[1] if len(sys.argv) > 1 else "Reguły projektu i testy zespołu"
+print(f"## {TITLE}\n")
 if not suites:
     print("Brak raportów testów (kompilacja się nie powiodła?). Sprawdź log kroku „Testy i reguły”.")
     raise SystemExit(0)

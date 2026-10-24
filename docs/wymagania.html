@@ -14,7 +14,7 @@
 <div class="wrap">
 <div class="top">
   <a class="logo" href="index.html"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></a>
-  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><span class="disabled" aria-disabled="true" title="Instrukcja pojawi się przed zajęciami">LAB 02</span><a href="wymagania.html" aria-current="page">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
+  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html">LAB 02</a><a href="wymagania.html" aria-current="page">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
 </div>
 <main class="doc"><article class="md">
 <h1>Wymagania projektu</h1>
@@ -48,6 +48,42 @@
 <tr>
 <td>Arkusz zespołów</td>
 <td>nazwa projektu, link do repozytorium, krótki opis projektu (1–2 zdania), dane każdej osoby</td>
+</tr>
+</tbody>
+</table></div>
+<h2>LAB 02 · Encje i dane startowe</h2>
+<p>Ocena na podstawie przebiegu w GitHub Actions pokazanego prowadzącemu na koniec zajęć (ostatni push na <code>main</code> albo uruchomienie ręczne). Instrukcja: <a href="lab02.html">LAB 02</a>.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Wymaganie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Encje</td>
+<td>co najmniej 3 własne encje poza <code>UserAccount</code>, w pakietach <code>pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.entity</code> (R2.01–R2.02); relacji jeszcze nie dodajecie</td>
+</tr>
+<tr>
+<td>Kolumny</td>
+<td>w każdej tabeli co najmniej 4 kolumny poza <code>id</code>, w tym co najmniej jedna wymagana (<code>nullable = false</code>) (R2.04–R2.05)</td>
+</tr>
+<tr>
+<td>Typy</td>
+<td>kwoty w <code>BigDecimal</code> (zalecenie, bez reguły); enumy tylko na ocenę 5</td>
+</tr>
+<tr>
+<td>Dane startowe</td>
+<td>aplikacja startuje, każda własna tabela ma co najmniej 3 wiersze z <code>data.sql</code>, widoczne w konsoli H2 (R2.03)</td>
+</tr>
+<tr>
+<td>Na ocenę 5</td>
+<td>kolumna typu enum z <code>@Enumerated(EnumType.STRING)</code> (R2.06) i klasa <code>@Embeddable</code> użyta w encji przez <code>@Embedded</code> (R2.07); etap „Ocena 5” w GitHub Actions</td>
+</tr>
+<tr>
+<td>Zespół</td>
+<td><code>&lt;lab&gt;2&lt;/lab&gt;</code> w <code>pom.xml</code>, przebieg „Testy i reguły” pokazany prowadzącemu; tag <code>lab-2</code> opcjonalnie</td>
 </tr>
 </tbody>
 </table></div>

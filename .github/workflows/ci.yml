@@ -7,6 +7,9 @@
 #     a w samym repozytorium szablonu tylko R1.02 (aplikacja startuje).
 # Reguły są zawsze pobierane z repozytorium szablonu, więc lokalne zmiany w src/test/java/pl/wsb/rules
 # nie wpływają na wynik.
+#
+# Dwa etapy: „Ocena 4” (reguły obowiązkowe i testy zespołu) oraz „Ocena 5” (testy z tagiem ocena5),
+# uruchamiany tylko po zielonym etapie „Ocena 4”.
 
 name: Testy i reguły
 
@@ -29,8 +32,9 @@ permissions:
   contents: read
 
 jobs:
-  testy-i-reguly:
-    name: Testy i reguły projektu
+  # Etap 1: reguły obowiązkowe wszystkich dotychczasowych laboratoriów i testy zespołu. Zielony = warunek oceny 4.
+  ocena-4:
+    name: Ocena 4 · reguły obowiązkowe
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -66,24 +70,79 @@ jobs:
             # Sam szablon ma celowo niewypełnione LAB 01 (to zadania zespołów), więc sprawdzamy tylko,
             # czy projekt się kompiluje i aplikacja startuje (R1.02). Pełne reguły: tag lab-N albo Run workflow.
             echo "args=-Dlab=1 -Dtest=Lab01ProjectRulesTest#applicationStarts -Dsurefire.failIfNoSpecifiedTests=false" >> "$GITHUB_OUTPUT"
+            echo "template=true" >> "$GITHUB_OUTPUT"
             LAB="1 (szablon: tylko R1.02)"
           fi
           echo "Obowiązujące reguły: LAB ${LAB:-z pom.xml}"
 
-      - name: Testy i reguły (mvn verify)
-        run: mvn --batch-mode --no-transfer-progress verify ${{ steps.lab.outputs.args }}
+      - name: Testy i reguły obowiązkowe (mvn verify)
+        run: mvn --batch-mode --no-transfer-progress verify -DexcludedGroups=ocena5 ${{ steps.lab.outputs.args }}
 
       - name: Podsumowanie reguł
         if: always()
-        run: python3 ci/summary.py >> "$GITHUB_STEP_SUMMARY"
+        run: python3 ci/summary.py "Ocena 4 · reguły obowiązkowe" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Raporty testów
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: raporty-testow
+          name: raporty-testow-ocena-4
           path: target/surefire-reports/
           if-no-files-found: ignore
+
+  # Etap 2: warunki dodatkowe (testy z tagiem ocena5). Uruchamia się tylko po zielonym etapie „Ocena 4”.
+  ocena-5:
+    name: Ocena 5 · warunki dodatkowe
+    needs: ocena-4
+    # czerwony etap „Ocena 5” nie oznacza całego przebiegu jako nieudanego: ocena 4 zależy tylko od etapu „Ocena 4”
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Pobierz oficjalne reguły z szablonu
+        run: |
+          if git clone --quiet --depth 1 "https://github.com/${RULES_REPO}.git" /tmp/szablon; then
+            rm -rf src/test/java/pl/wsb/rules
+            cp -r /tmp/szablon/src/test/java/pl/wsb/rules src/test/java/pl/wsb/rules
+            echo "Reguły z ${RULES_REPO} @ $(git -C /tmp/szablon rev-parse --short HEAD)"
+          else
+            echo "::warning::Nie udało się pobrać reguł z ${RULES_REPO}. Używam reguł z repozytorium zespołu."
+          fi
+
+      - name: Ustal numer laboratorium
+        id: lab
+        env:
+          INPUT_LAB: ${{ github.event.inputs.lab }}
+        run: |
+          LAB="$INPUT_LAB"
+          if [ -z "$LAB" ] && [[ "$GITHUB_REF" == refs/tags/lab-* ]]; then
+            LAB=$(echo "$GITHUB_REF_NAME" | sed -E 's/^lab-([0-9]+).*/\1/')
+          fi
+          if [ -n "$LAB" ]; then
+            echo "args=-Dlab=$LAB" >> "$GITHUB_OUTPUT"
+          elif [ "$GITHUB_REPOSITORY" = "$RULES_REPO" ]; then
+            # Sam szablon ma celowo niewypełnione LAB 01 (to zadania zespołów), więc sprawdzamy tylko,
+            # czy projekt się kompiluje i aplikacja startuje (R1.02). Pełne reguły: tag lab-N albo Run workflow.
+            echo "args=-Dlab=1 -Dtest=Lab01ProjectRulesTest#applicationStarts -Dsurefire.failIfNoSpecifiedTests=false" >> "$GITHUB_OUTPUT"
+            echo "template=true" >> "$GITHUB_OUTPUT"
+            LAB="1 (szablon: tylko R1.02)"
+          fi
+          echo "Obowiązujące reguły: LAB ${LAB:-z pom.xml}"
+
+      - name: Reguły na ocenę 5 (mvn verify -Dgroups=ocena5)
+        if: steps.lab.outputs.template != 'true'
+        run: mvn --batch-mode --no-transfer-progress verify -Dgroups=ocena5 ${{ steps.lab.outputs.args }}
+
+      - name: Podsumowanie reguł
+        if: always() && steps.lab.outputs.template != 'true'
+        run: python3 ci/summary.py "Ocena 5 · warunki dodatkowe" >> "$GITHUB_STEP_SUMMARY"
 
   wklad-zespolu:
     name: Wkład członków zespołu

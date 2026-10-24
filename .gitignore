@@ -5,3 +5,7 @@ target/
 .DS_Store
 *.log
 /data/
+
+# Materiały prowadzącego (wykłady, arkusze z danymi studentów) nie trafiają do repozytorium
+*.pptx
+*.xlsx

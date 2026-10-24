@@ -14,7 +14,7 @@
 <div class="wrap">
 <div class="top">
   <a class="logo" href="index.html"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></a>
-  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><span class="disabled" aria-disabled="true" title="Instrukcja pojawi się przed zajęciami">LAB 02</span><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html" aria-current="page">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
+  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html">LAB 02</a><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html" aria-current="page">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
 </div>
 <main class="doc"><article class="md">
 <h1>Reguły projektu</h1>
@@ -45,12 +45,17 @@ więc ten sam zestaw ocenia wszystkie zespoły.</p>
 <td>pliki + Spring Boot</td>
 <td>tożsamość projektu, wizytówka, aplikacja startuje, konta zespołu</td>
 </tr>
+<tr>
+<td>02</td>
+<td>ArchUnit + Spring Boot</td>
+<td>encje i ich pakiety, relacje (<code>@ManyToOne</code>, N:M, <code>mappedBy</code>), typy kolumn, dane startowe w każdej tabeli</td>
+</tr>
 </tbody>
 </table></div>
 <h2>Konwencja pakietów</h2>
 <pre><code>pl.wsb.&lt;projekt&gt;                          klasa @SpringBootApplication (dokładnie jedna)
 pl.wsb.&lt;projekt&gt;.account.domain           gotowe konto użytkownika (user_account)
-pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.domain           @Entity, @Embeddable, enumy, *Repository
+pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.entity           @Entity, @Embeddable, enumy
 pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.application      @Service, przypadki użycia, @Transactional
 pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.api              publiczny kontrakt: fasady, rekordy, zdarzenia
 pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.web              @RestController, *Request / *Response
@@ -88,6 +93,49 @@ pl.wsb.&lt;projekt&gt;.shared | common | config moduły wspólne, dostępne dla 
 </tr>
 </tbody>
 </table></div>
+<h2>LAB 02 · Encje i dane startowe</h2>
+<p>Instrukcja: <a href="lab02.html">LAB 02</a>. „Własne encje” to wszystkie klasy z <code>@Entity</code> poza gotowym <code>UserAccount</code>.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Reguła</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R2.01</td>
+<td>Co najmniej 3 własne encje (<code>@Entity</code>)</td>
+</tr>
+<tr>
+<td>R2.02</td>
+<td>Encje i <code>@Embeddable</code> leżą w pakietach <code>pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.entity</code> (gotowe <code>UserAccount</code> zostaje w <code>account.domain</code>)</td>
+</tr>
+<tr>
+<td>R2.03</td>
+<td>Aplikacja startuje na czystej bazie H2, a każda własna tabela ma co najmniej 3 wiersze z <code>data.sql</code></td>
+</tr>
+<tr>
+<td>R2.04</td>
+<td>Każda własna tabela ma co najmniej 4 kolumny poza <code>id</code> (kolumny klasy <code>@Embedded</code> się liczą)</td>
+</tr>
+<tr>
+<td>R2.05</td>
+<td>Każda własna tabela ma co najmniej jedną kolumnę wymaganą (<code>nullable = false</code>)</td>
+</tr>
+<tr>
+<td>R2.06</td>
+<td><strong>Ocena 5:</strong> co najmniej jedna własna tabela ma kolumnę typu enum, a każde pole enum ma <code>@Enumerated(EnumType.STRING)</code></td>
+</tr>
+<tr>
+<td>R2.07</td>
+<td><strong>Ocena 5:</strong> co najmniej jedna własna tabela ma pole <code>@Embedded</code> typu klasy <code>@Embeddable</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>R2.01–R2.05 działają w etapie „Ocena 4”, R2.06–R2.07 w etapie „Ocena 5” (uruchamianym po zielonym etapie „Ocena 4”).
+R2.03 uruchamia aplikację, pozostałe czytają skompilowane klasy (ArchUnit). Autotest w
+<code>src/test/java/pl/wsb/rules/lab02</code> sprawdza je na przykładzie kawiarni i na celowo błędnym modelu.</p>
 <p>Reguły kolejnych laboratoriów pojawią się w szablonie przed danymi zajęciami.</p>
 </article></main>
 <footer>
