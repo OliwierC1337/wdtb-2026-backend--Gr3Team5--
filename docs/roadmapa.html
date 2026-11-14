@@ -14,18 +14,18 @@
 <div class="wrap">
 <div class="top">
   <a class="logo" href="index.html"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></a>
-  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html">LAB 02</a><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html" aria-current="page">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
+  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html">LAB 02</a><a href="lab03.html">LAB 03</a><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html" aria-current="page">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
 </div>
 <main class="doc"><article class="md">
 <h1>Roadmapa laboratoriów</h1>
 <p>Każde laboratorium dokłada jedną warstwę backendu, a reguły projektu rosną razem z kodem.
-Laboratoria 01–02 mają instrukcje. Pozostałe opisują zakres i wymagania; instrukcje pojawią się przed zajęciami.
+Laboratoria 01–03 mają instrukcje. Pozostałe opisują zakres i wymagania; instrukcje pojawią się przed zajęciami.
 Wymagania laboratoriów: <a href="wymagania.html">Wymagania</a>. Zaliczenie i obecności: <a href="zasady.html">Zasady</a>.
 Pracujemy na zajęciach; kryteria oceny prowadzący podaje zawsze na początku zajęć.</p>
 <pre><code>LAB 01        LAB 02          LAB 03            LAB 04           LAB 05           LAB 06          LAB 07
-Start     →   Encje i     →   Repozytoria   →   Serwisy i    →   Kontrolery   →   Rozbudowa   →   Odrabianie
-bez oceny     dane startowe   i zapytania       komponenty       REST             zdarzenia,      poprawy,
-opis pomysłu  JPA, data.sql   Spring Data       DI, transakcje   DTO, walidacja   integracje      zadania dod.
+Start     →   Encje i     →   Relacje       →   Zapytania,   →   Kontrolery   →   Rozbudowa   →   Odrabianie
+bez oceny     dane startowe   między tabelami   serwisy i        REST             zdarzenia,      poprawy,
+opis pomysłu  JPA, data.sql   klucze obce       komponenty       DTO, walidacja   integracje      zadania dod.
 </code></pre>
 <hr />
 <h2>LAB 01 · Start (bez oceny)</h2>
@@ -39,7 +39,7 @@ opis pomysłu  JPA, data.sql   Spring Data       DI, transakcje   DTO, walidacja
 <h2>LAB 02 · Encje i dane startowe</h2>
 <p>→ <a href="lab02.html">instrukcja LAB 02</a></p>
 <ul>
-<li><strong>na początek: prezentacja wizytówek</strong> z LAB 01: zespół uruchamia aplikację i pokazuje wypełnioną wizytówkę na <code>http://localhost:8080</code> (autorzy, pomysł, zmiany)</li>
+<li><strong>prezentacja wizytówek przy stanowiskach</strong> (w trakcie pracy, 2 minuty na zespół): zespół uruchamia aplikację i pokazuje wypełnioną wizytówkę na <code>http://localhost:8080</code> (autorzy, pomysł, zmiany)</li>
 <li>wprowadzenie: encje na przykładzie kawiarni, typy kolumn, klasa wbudowana <code>@Embeddable</code></li>
 <li>encje JPA: <code>@Entity</code>, <code>@Table</code>, <code>@Id</code>, <code>@GeneratedValue</code>, <code>@Column</code>, <code>@Enumerated(STRING)</code></li>
 <li>zadanie: 3 własne tabele z pomysłu zespołu, bez relacji, dane startowe w <code>data.sql</code>, sprawdzenie w konsoli H2</li>
@@ -48,15 +48,20 @@ opis pomysłu  JPA, data.sql   Spring Data       DI, transakcje   DTO, walidacja
 <li>konsola H2: czytanie DDL wygenerowanego przez Hibernate, <code>select</code> na każdej tabeli, pokazanie przebiegu w GitHub Actions (tag <code>lab-2</code> opcjonalnie)</li>
 <li><strong>Reguły:</strong> R2.01–R2.05 (ocena 4), R2.06–R2.07 (ocena 5: enum i <code>@Embeddable</code>)</li>
 </ul>
-<h2>LAB 03 · Repozytoria i zapytania</h2>
+<h2>LAB 03 · Relacje między tabelami</h2>
+<p>→ <a href="lab03.html">instrukcja LAB 03</a></p>
 <ul>
-<li>higiena encji: LAZY, STRING, konstruktor, <code>@Embeddable</code></li>
-<li>Spring Data JPA: zapytania pochodne, <code>@Query</code> (JPQL), <code>GROUP BY</code>, projekcje, <code>Pageable</code></li>
-<li>problem N+1: <code>QueryCounter</code>, <code>@EntityGraph</code>, <code>JOIN FETCH</code></li>
-<li>„pytania inwestora” i testy <code>@DataJpaTest</code></li>
+<li>warunek przystąpienia: skończone LAB 01 i LAB 02; zadanie można dokończyć w domu; oddanie tagiem <code>lab-3</code> najpóźniej w niedzielę 22 listopada 2026 do godz. 23:59</li>
+<li>wprowadzenie: klucz obcy, <code>@ManyToOne</code> + <code>@JoinColumn</code>, strona odwrotna <code>@OneToMany(mappedBy)</code>, <code>@OneToOne</code></li>
+<li>ocena 3 (minimum): co najmniej 1 relacja <code>@ManyToOne</code>, klucze obce w <code>data.sql</code>, aplikacja startuje</li>
+<li>ocena 4: trzy rodzaje relacji (2 × <code>@ManyToOne</code>, <code>@OneToMany</code>, <code>@OneToOne</code>) oraz skończony schemat: co najmniej 5 tabel, żadna bez relacji, relacja do <code>UserAccount</code>, wiele-do-wielu, plik <code>SCHEMAT.md</code> z diagramem ER</li>
+<li>ocena 5: <code>fetch = LAZY</code> na każdej relacji, repozytorium <code>JpaRepository</code> z zapytaniem pochodnym przez relację</li>
+<li><strong>Reguły:</strong> R3.01–R3.02 (ocena 3), R3.03–R3.10 (ocena 4), R3.11–R3.12 (ocena 5)</li>
 </ul>
-<h2>LAB 04 · Serwisy i komponenty</h2>
+<h2>LAB 04 · Zapytania, serwisy i komponenty</h2>
 <ul>
+<li>Spring Data JPA: zapytania pochodne, <code>@Query</code> (JPQL), <code>GROUP BY</code>, projekcje, <code>Pageable</code>; pytania inwestora jako metody repozytoriów z testami <code>@DataJpaTest</code></li>
+<li>problem N+1: <code>@EntityGraph</code>, <code>JOIN FETCH</code></li>
 <li>kontener IoC: <code>@Component</code>, <code>@Service</code>, <code>@Configuration</code> + <code>@Bean</code>, wstrzykiwanie przez konstruktor, cykl życia i zasięg beana</li>
 <li>warstwa <code>application</code>: przypadki użycia, <code>@Transactional</code> (propagacja, <code>readOnly</code>, rollback)</li>
 <li>reguły biznesowe w kodzie i wyjątki domenowe</li>

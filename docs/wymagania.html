@@ -14,7 +14,7 @@
 <div class="wrap">
 <div class="top">
   <a class="logo" href="index.html"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></a>
-  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html">LAB 02</a><a href="wymagania.html" aria-current="page">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
+  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html">LAB 02</a><a href="lab03.html">LAB 03</a><a href="wymagania.html" aria-current="page">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
 </div>
 <main class="doc"><article class="md">
 <h1>Wymagania projektu</h1>
@@ -84,6 +84,38 @@
 <tr>
 <td>Zespół</td>
 <td><code>&lt;lab&gt;2&lt;/lab&gt;</code> w <code>pom.xml</code>, przebieg „Testy i reguły” pokazany prowadzącemu; tag <code>lab-2</code> opcjonalnie</td>
+</tr>
+</tbody>
+</table></div>
+<h2>LAB 03 · Relacje między tabelami</h2>
+<p>Warunek przystąpienia: skończone LAB 01 i LAB 02 (zielone reguły LAB 01 i LAB 02 z <code>&lt;lab&gt;2&lt;/lab&gt;</code>). Zadanie można oddać na zajęciach albo dokończyć w domu i oddać tagiem <code>lab-3</code> najpóźniej w niedzielę 22 listopada 2026 do godz. 23:59; ocena 3, 4 albo 5 wynika z etapów przebiegu w GitHub Actions dla tego tagu. Instrukcja: <a href="lab03.html">LAB 03</a>.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Wymaganie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ocena 3: minimum</td>
+<td>co najmniej 1 relacja <code>@ManyToOne</code> z <code>@JoinColumn(name = "…_id")</code>; aplikacja startuje, każda relacja ma w <code>data.sql</code> wiersz z wypełnionym kluczem obcym (R3.01–R3.02)</td>
+</tr>
+<tr>
+<td>Ocena 4: trzy rodzaje relacji</td>
+<td>co najmniej 2 × <code>@ManyToOne</code>, 1 × <code>@OneToMany</code> z <code>mappedBy</code> albo <code>@JoinColumn</code>, 1 × <code>@OneToOne</code> z <code>@JoinColumn</code> (R3.03–R3.05)</td>
+</tr>
+<tr>
+<td>Ocena 4: skończony schemat</td>
+<td>co najmniej 5 własnych tabel, każda połączona relacją, jedna encja wskazuje na <code>UserAccount</code>, relacja wiele-do-wielu (R3.06–R3.09)</td>
+</tr>
+<tr>
+<td>Ocena 4: schemat widoczny</td>
+<td>plik <code>SCHEMAT.md</code> z diagramem ER, generowany przez reguły i zgodny z encjami (R3.10)</td>
+</tr>
+<tr>
+<td>Ocena 5</td>
+<td><code>fetch = LAZY</code> na każdym <code>@ManyToOne</code> i <code>@OneToOne</code> (R3.11), repozytorium w <code>&lt;moduł&gt;.repository</code> z zapytaniem przez relację (R3.12)</td>
 </tr>
 </tbody>
 </table></div>

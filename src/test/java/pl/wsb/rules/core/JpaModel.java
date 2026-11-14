@@ -46,6 +46,11 @@ public final class JpaModel {
         return rootPackage;
     }
 
+    /** Wszystkie klasy modelu (encje, repozytoria, pozostałe), np. do szukania interfejsów Spring Data. */
+    public JavaClasses classes() {
+        return classes;
+    }
+
     /** Wszystkie klasy z {@code @Entity}, posortowane po nazwie. */
     public List<JavaClass> entities() {
         return annotated(Entity.class);

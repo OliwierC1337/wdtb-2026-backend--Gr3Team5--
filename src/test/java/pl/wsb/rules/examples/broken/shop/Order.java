@@ -11,7 +11,8 @@ import java.util.List;
 
 /**
  * Celowo błędna encja do autotestu reguł: zły pakiet (brak .domain), @ManyToOne bez @JoinColumn,
- * enum zapisany jako numer, kwota w double, @OneToMany bez mappedBy.
+ * enum zapisany jako numer, kwota w double, @OneToMany bez mappedBy;
+ * w {@link LoyaltyCard} @OneToOne bez @JoinColumn, a {@link Coupon} to tabela bez żadnej relacji.
  */
 @Entity
 public class Order {

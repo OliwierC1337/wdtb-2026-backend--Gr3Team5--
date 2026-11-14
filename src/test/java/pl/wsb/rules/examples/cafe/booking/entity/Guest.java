@@ -8,11 +8,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import pl.wsb.rules.examples.cafe.account.domain.UserAccount;
 
-/** Gość kawiarni: dane biznesowe osoby, powiązane z kontem logowania (UserAccount). */
+/** Gość kawiarni: dane biznesowe osoby, powiązane jeden do jednego z kontem logowania (UserAccount). */
 @Entity
 @Table(name = "guest")
 public class Guest {
@@ -27,7 +27,7 @@ public class Guest {
     @Column(name = "phone", length = 20)
     private String phone;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_account_id")
     private UserAccount account;
 

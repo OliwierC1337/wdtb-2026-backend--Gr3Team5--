@@ -14,7 +14,7 @@
 <div class="wrap">
 <div class="top">
   <a class="logo" href="index.html"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></a>
-  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html" aria-current="page">LAB 02</a><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
+  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html" aria-current="page">LAB 02</a><a href="lab03.html">LAB 03</a><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
 </div>
 <main class="doc"><article class="md">
 <h1>LAB 02 · Encje i dane startowe: pierwsze tabele projektu</h1>
@@ -29,8 +29,9 @@ Zielony etap „Ocena 4” (reguły R2.01–R2.05) to warunek konieczny. Na ocen
 Pracujecie razem nad każdą tabelą (krok C3).</p>
 </blockquote>
 <blockquote>
-<p><strong>Od tego zaczynamy.</strong> Każdy zespół uruchamia aplikację w IntelliJ i pokazuje na <strong>http://localhost:8080</strong>
-wizytówkę projektu z LAB 01. Wizytówka musi już być w repozytorium zespołu na GitHubie, nie tylko na jednym komputerze.</p>
+<p><strong>Prezentacja wizytówki przy stanowisku.</strong> W trakcie pracy prowadzący podchodzi do każdego zespołu, a zespół pokazuje
+na <strong>http://localhost:8080</strong> wizytówkę projektu z LAB 01 (2 minuty, część A). Wizytówka musi już być w repozytorium
+zespołu na GitHubie, nie tylko na jednym komputerze.</p>
 </blockquote>
 <p>Materiały: wykład JPA z części wykładowej przedmiotu (encje, adnotacje, relacje) oraz
 <a href="index.html">strona główna dokumentacji</a> (sekcja „JPA i Hibernate”, diagram warstw).
@@ -39,19 +40,18 @@ Te same strony są w katalogu <code>docs/</code> po pobraniu nowych materiałów
 <h2>Plan zajęć</h2>
 <p class="legend"><span class="tag theory">Teoria</span>do przeczytania i omówienia, nic nie zmieniacie w kodzie. <span class="tag task">Zadanie</span>wykonujecie w IntelliJ i na GitHubie.</p>
 <ol class="agenda">
-<li><span class="tag task">Zadanie</span><strong>A · Prezentacja wizytówek:</strong> każdy zespół, 2–3 minuty</li>
-<li><span class="tag theory">Teoria</span><strong>B · Wprowadzenie:</strong> encje na przykładzie kawiarni, typy kolumn, <code>@Embeddable</code></li>
-<li><span class="tag task">Zadanie</span><strong>C · Aktualizacja projektu:</strong> nowe materiały, <code>lab=2</code>, podział pracy w zespole</li>
-<li><span class="tag task">Zadanie</span><strong>D · Wybór tabel:</strong> 3 tabele bez relacji z Waszego pomysłu</li>
-<li><span class="tag task">Zadanie</span><strong>E · Encje Waszego projektu:</strong> 3 własne tabele, praca całego zespołu</li>
-<li><span class="tag task">Zadanie</span><strong>F · Przykładowe dane:</strong> <code>insert</code> do każdej tabeli w <code>data.sql</code>, sprawdzenie w konsoli H2</li>
-<li><span class="tag task">Zadanie</span><strong>G · Reguły, commit, pokazanie przebiegu</strong></li>
+<li><span class="tag theory">Teoria</span><strong>B · Wprowadzenie:</strong> prowadzący omawia B1 i B3; B2 i B4 to ściąga na czas pracy</li>
+<li><span class="tag task">Zadanie</span><strong>C · Aktualizacja projektu:</strong> Sync fork, <code>lab=2</code>, praca na jednym laptopie</li>
+<li><span class="tag task">Zadanie</span><strong>D–F · Praca zespołu:</strong> wybór 3 tabel, encje, <code>insert</code> w <code>data.sql</code>, konsola H2</li>
+<li><span class="tag task">Zadanie</span><strong>A · Prezentacja wizytówki</strong> w trakcie pracy: prowadzący podchodzi do każdego zespołu, 2 minuty przy Waszym laptopie</li>
+<li><span class="tag task">Zadanie</span><strong>G · Reguły, commit, pokazanie przebiegu</strong> na koniec zajęć</li>
 </ol>
 <section class="part task">
 <h2><span class="tag task">Zadanie</span>A · Prezentacja wizytówek</h2>
-<p>Zespoły prezentują po kolei. Zespół uruchamia aplikację (zielona strzałka obok <code>main</code> w klasie
-<code>&lt;NazwaProjektu&gt;Application</code>) i otwiera <strong>http://localhost:8080</strong>. Na stronie nie może zostać
-żaden znacznik <code>[uzupełnij]</code>. Na podstawie wizytówki zespół przedstawia:</p>
+<p>Prezentacja odbywa się <strong>przy Waszym stanowisku, w trakcie pracy</strong>: prowadzący podchodzi kolejno do zespołów.
+Zanim podejdzie, miejcie uruchomioną aplikację (zielona strzałka obok <code>main</code> w klasie <code>&lt;NazwaProjektu&gt;Application</code>)
+i otwartą stronę <strong>http://localhost:8080</strong>. Na stronie nie może zostać żaden znacznik <code>[uzupełnij]</code>.
+W 2 minuty zespół przedstawia na podstawie wizytówki:</p>
 <ol>
 <li><strong>autorów pomysłu:</strong> każda osoba mówi krótko o sobie (kim jest, czym się interesuje, co już potrafi),</li>
 <li><strong>pomysł:</strong> problem, dla kogo jest rozwiązanie, trzy najważniejsze funkcje,</li>
@@ -60,6 +60,7 @@ Te same strony są w katalogu <code>docs/</code> po pobraniu nowych materiałów
 </section>
 <section class="part theory">
 <h2><span class="tag theory">Teoria</span>B · Wprowadzenie: encje, typy kolumn, @Embeddable</h2>
+<p>Na zajęciach prowadzący omawia B1 i B3 (ok. 10 minut). B2 i B4 to ściąga: wracacie do nich w trakcie pracy.</p>
 <h3>B1. Encja to klasa, która opisuje tabelę</h3>
 <p>Na LAB 01 widzieliście w oknie <em>Run</em> polecenie <code>create table user_account</code>. Hibernate wygenerował je
 z klasy <code>UserAccount</code>. Tak działa JPA: <strong>klasa ↔ tabela, pole ↔ kolumna, obiekt ↔ wiersz</strong>.
@@ -529,9 +530,11 @@ z <code>Caused by</code>: tam jest nazwa tabeli i kolumny.</p>
    <strong>Ocena 4 · reguły obowiązkowe</strong> (musi być zielony) i <strong>Ocena 5 · warunki dodatkowe</strong>
    (uruchamia się po zielonym etapie „Ocena 4”). Przy czerwonym etapie w <em>Summary</em> jest lista reguł do poprawy.</li>
 <li><strong>Wizytówka:</strong> w <code>static/index.html</code> dopiszcie do listy zmian, co powstało na LAB 02 (nazwy tabel),
-   potem <em>Commit</em> i <em>Push</em>. Od tego zaczniecie prezentację na kolejnych zajęciach.</li>
-<li><strong>Pokazanie przebiegu (obowiązkowe):</strong> gdy wszystkie zmiany są na GitHubie, pokażcie prowadzącemu w zakładce
-   <em>Actions</em> przebieg „Testy i reguły” dla ostatniego commita na <code>main</code>: oba etapy i <em>Summary</em>.
+   potem <em>Commit</em> i <em>Push</em>.</li>
+<li><strong>Pokazanie przebiegu (obowiązkowe, na koniec zajęć):</strong> gdy wszystkie zmiany są na GitHubie, zgłoście gotowość; prowadzący
+   podchodzi do stanowiska, a Wy pokazujecie w zakładce <em>Actions</em> przebieg „Testy i reguły” dla ostatniego commita na <code>main</code>:
+   oba etapy i <em>Summary</em>. Zespoły, do których prowadzący nie zdąży podejść, ocenia po zajęciach z ostatniego przebiegu
+   wypchniętego do końca zajęć.
    Jeśli przebiegu nie ma albo dotyczy starszego commita, uruchomcie go ręcznie: <em>Actions</em> → <em>Testy i reguły</em> → <em>Run workflow</em> → gałąź <code>main</code>, w polu „Numer laboratorium” wpiszcie <code>2</code> → <em>Run workflow</em>.</li>
 <li><strong>Tag <code>lab-2</code> (opcjonalnie):</strong> zaznacza wersję do oceny. Okno <em>Git</em> → zakładka <em>Log</em> →
    prawy przycisk na ostatnim commicie → <em>New Tag…</em> → nazwa <code>lab-2</code>, potem <em>Git → Push</em> z zaznaczonym

@@ -10,7 +10,8 @@ Materiały przygotował: **Wojciech Koszela**, prowadzący
 
 **Dokumentacja: [wkoszela.github.io/WdTB-2026-Backend--projectname--](https://wkoszela.github.io/WdTB-2026-Backend--projectname--/)**
 (instrukcje: [LAB 01](https://wkoszela.github.io/WdTB-2026-Backend--projectname--/lab01.html),
-[LAB 02](https://wkoszela.github.io/WdTB-2026-Backend--projectname--/lab02.html)).
+[LAB 02](https://wkoszela.github.io/WdTB-2026-Backend--projectname--/lab02.html),
+[LAB 03](https://wkoszela.github.io/WdTB-2026-Backend--projectname--/lab03.html)).
 Są tam instrukcje do zajęć, wymagania, zasady zaliczenia i opis reguł projektu.
 **Arkusz zespołów (Excel): [otwórz w SharePoint](https://m365ht-my.sharepoint.com/:x:/g/personal/wojciech_koszela_wroclaw_merito_pl/IQCEEPWN_2owS6zMeDfSfeG-AXpOGAC7AgOlj9SAudd8Y0w?e=S2s4H9)**, zakładka Waszej grupy.
 Te same strony znajdują się w katalogu [`docs/`](docs/index.html); po sklonowaniu repozytorium można je otworzyć lokalnie w przeglądarce.
@@ -19,7 +20,7 @@ Te same strony znajdują się w katalogu [`docs/`](docs/index.html); po sklonowa
 
 - Zespół 3 osoby, jedno repozytorium: **fork** tego szablonu przemianowany na **`WdTB-2026-Backend-<nazwaprojektu>`**.
 - Każdy zespół buduje backend własnego projektu: encje i relacje, repozytoria i zapytania, serwisy, REST API.
-- **LAB 02 zaczyna się od prezentacji:** zespół uruchamia aplikację i pokazuje na http://localhost:8080 wypełnioną wizytówkę
+- **Prezentacja na LAB 02, przy stanowisku:** zespół uruchamia aplikację i pokazuje prowadzącemu na http://localhost:8080 wypełnioną wizytówkę
   projektu (`src/main/resources/static/index.html`, bez `[uzupełnij]`). Wizytówkę wypełniacie na LAB 01.
 - Wymagania każdego laboratorium sprawdzają automatyczne testy (reguły projektu) w GitHub Actions. Tag `lab-N` uruchamia reguły laboratorium N.
 
@@ -27,8 +28,8 @@ Te same strony znajdują się w katalogu [`docs/`](docs/index.html); po sklonowa
 |---|---|
 | LAB 01 | Start: projekt, aplikacja i opis pomysłu (bez oceny) |
 | LAB 02 | Encje JPA i dane startowe (ocena z pokazanego przebiegu w GitHub Actions) |
-| LAB 03 | Repozytoria i zapytania |
-| LAB 04 | Serwisy i komponenty |
+| LAB 03 | Relacje między tabelami, skończony schemat bazy (można dokończyć w domu; oddanie tagiem `lab-3` do niedzieli 22 listopada 2026, godz. 23:59) |
+| LAB 04 | Zapytania, serwisy i komponenty |
 | LAB 05 | Kontrolery REST |
 | LAB 06 | Rozbudowa: zdarzenia, konfiguracja, zadania cykliczne |
 | LAB 07 | Odrabianie |
@@ -93,7 +94,7 @@ Dane dopisane ręcznie w konsoli H2 znikają po restarcie; to, co ma zostać, do
 | testy i reguły dla laboratorium z `<lab>` w `pom.xml` | panel *Maven* (prawa krawędź okna) → *Lifecycle* → dwuklik na *verify* |
 
 Wynik jest w oknie *Run*: przy każdej regule zielony albo czerwony znak, a przy czerwonej opis, co poprawić.
-W GitHub Actions przebieg „Testy i reguły” ma dwa etapy: *Ocena 4 · reguły obowiązkowe* i *Ocena 5 · warunki dodatkowe*.
+W GitHub Actions przebieg „Testy i reguły” ma etapy *Ocena 4 · reguły obowiązkowe* i *Ocena 5 · warunki dodatkowe*, a od LAB 03 także pierwszy etap *Ocena 3 · reguły podstawowe*.
 
 ## Co zmodyfikować na LAB 01
 
@@ -131,6 +132,25 @@ Instrukcja krok po kroku: `docs/lab02.html`. Zespół pracuje razem **na jednym 
 Na koniec zajęć zespół pokazuje prowadzącemu przebieg „Testy i reguły” w zakładce *Actions* dla ostatniego commita na `main`.
 Przebieg można uruchomić ręcznie: *Actions* → *Testy i reguły* → *Run workflow* → numer laboratorium `2`.
 Opcjonalnie zespół tworzy tag `lab-2` (okno *Git* → *Log* → prawy przycisk na commicie → *New Tag…*, potem *Git → Push* z *Push Tags*).
+
+## Co zmodyfikować na LAB 03
+
+Instrukcja krok po kroku: `docs/lab03.html`. Warunek przystąpienia: skończone LAB 01 i LAB 02
+(zielone reguły LAB 01 i LAB 02 z `<lab>2</lab>`).
+
+| Plik | Zmiana | Reguła |
+|---|---|---|
+| `pom.xml`, `<lab>` | `2` → `3` (od razu commit i push) | włącza R3.xx |
+| ocena 3 (minimum) | co najmniej 1 pole `@ManyToOne` z `@JoinColumn(name = "…_id")`; w `data.sql` kolumny kluczy obcych, sekcje tabel nadrzędnych przed podrzędnymi | R3.01–R3.02 |
+| ocena 4: trzy rodzaje relacji | co najmniej 2 pola `@ManyToOne`, 1 pole `@OneToMany` z `mappedBy` albo `@JoinColumn`, 1 pole `@OneToOne` z `@JoinColumn` | R3.03–R3.05 |
+| ocena 4: skończony schemat | co najmniej 5 własnych tabel, każda połączona relacją, jedna encja wskazuje na `UserAccount`, relacja wiele-do-wielu | R3.06–R3.09 |
+| ocena 4: `SCHEMAT.md` | plik z diagramem schematu, generowany przez *Maven → verify*, dodany do commita | R3.10 |
+| ocena 5 | `fetch = FetchType.LAZY` na każdej relacji, interfejs `JpaRepository` w `<moduł>.repository` z metodą np. `findByGuest_FullName` | R3.11–R3.12 |
+| `src/main/resources/static/index.html` | w liście zmian: co powstało na LAB 03 | — |
+
+Zadanie można oddać na zajęciach albo dokończyć w domu i oddać najpóźniej w niedzielę 22 listopada 2026 do godz. 23:59. Oddanie to tag `lab-3`
+(okno *Git* → *Log* → prawy przycisk na commicie → *New Tag…*, potem *Git → Push* z *Push Tags*); ocena wynika z przebiegu
+„Testy i reguły” dla tego tagu: zielony etap „Ocena 3” to 3, także „Ocena 4” to 4, wszystkie trzy to 5.
 
 ## Konwencja nazw
 

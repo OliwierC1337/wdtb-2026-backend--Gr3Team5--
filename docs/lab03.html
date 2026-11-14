@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LAB 03 · Relacje między tabelami · Wprowadzenie do technologii backendowych</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script>try{var t=localStorage.getItem('wdtb-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+<div class="wrap">
+<div class="top">
+  <a class="logo" href="index.html"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></a>
+  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html">LAB 02</a><a href="lab03.html" aria-current="page">LAB 03</a><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
+</div>
+<main class="doc"><article class="md">
+<h1>LAB 03 · Relacje między tabelami: skończony schemat bazy</h1>
+<blockquote>
+<p><strong>Cel.</strong> Schemat bazy Waszego projektu jest skończony: wszystkie tabele są połączone relacjami, a w modelu występują
+relacje <code>@ManyToOne</code>, <code>@OneToMany</code> i <code>@OneToOne</code>, a na wyższe oceny także wiele-do-wielu.</p>
+<p><strong>Zadanie można dokończyć w domu.</strong> Zaczynacie na zajęciach i możecie oddać je od razu, ale nie musicie: czego nie skończycie na zajęciach, kończycie w domu.</p>
+<p><strong>Termin: niedziela 22 listopada 2026, godz. 23:59.</strong> Do tej chwili na GitHubie ma być tag <code>lab-3</code> (część G). Po terminie prowadzący sprawdza prace wszystkich grup.</p>
+<p><strong>Ocena: 3, 4 albo 5.</strong> Zależy od tego, który z poniższych poziomów osiąga projekt. Sprawdza to automatycznie
+przebieg „Testy i reguły” w GitHub Actions; pełna lista kryteriów jest w części G.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Ocena</th>
+<th>Co jest w projekcie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>3</strong></td>
+<td><strong>minimum:</strong> co najmniej jedna relacja <code>@ManyToOne</code> między Waszymi tabelami, klucze obce w <code>data.sql</code>, aplikacja startuje</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td><strong>trzy rodzaje relacji:</strong> 2 × <code>@ManyToOne</code>, <code>@OneToMany</code> i <code>@OneToOne</code>, oraz <strong>skończony schemat:</strong> co najmniej 5 własnych tabel, wszystkie połączone, relacja do konta użytkownika, relacja wiele-do-wielu i plik <code>SCHEMAT.md</code> z diagramem</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>wszystko jak na ocenę 4 oraz <code>LAZY</code> na każdej relacji i repozytorium z zapytaniem przez relację</td>
+</tr>
+</tbody>
+</table></div>
+</blockquote>
+<blockquote>
+<p><strong>Warunek przystąpienia: skończone LAB 01 i LAB 02.</strong> Przed rozpoczęciem pracy przebieg „Testy i reguły” Waszego projektu
+z <code>&lt;lab&gt;2&lt;/lab&gt;</code> ma zielone wszystkie reguły LAB 01 i LAB 02. Zespół, który tego nie ma, zaczyna zajęcia od dokończenia
+<a href="lab01.html">LAB 01</a> i <a href="lab02.html">LAB 02</a>. Etap „Ocena 3” sprawdza reguły wszystkich dotychczasowych laboratoriów łącznie,
+więc bez nich LAB 03 nie zostanie zaliczone na żadną ocenę.</p>
+</blockquote>
+<p>Aktualna dokumentacja: <a href="https://wkoszela.github.io/WdTB-2026-Backend--projectname--/" target="_blank" rel="noopener">wkoszela.github.io/WdTB-2026-Backend--projectname--</a>.</p>
+<h2>Spis treści</h2>
+<p class="legend"><span class="tag theory">Teoria</span>do przeczytania i omówienia. <span class="tag task">Zadanie</span>wykonujecie w IntelliJ i na GitHubie.
+Części są zwinięte: kliknięcie w tytuł części albo w pozycję spisu ją rozwija.</p>
+<p class="toc-actions"><button type="button" data-parts="open">Rozwiń wszystko</button><button type="button" data-parts="close">Zwiń wszystko</button></p>
+<ol class="agenda toc">
+<li><span class="tag theory">Teoria</span><a href="#czesc-a"><strong>A · Rodzaje relacji</strong></a> na przykładzie kawiarni
+  <ul><li><a href="#wiele-do-wielu">Jak powstaje relacja wiele-do-wielu</a>: <a href="#sposob-1">sposób 1, encja łącząca</a> · <a href="#sposob-2">sposób 2, @ManyToMany</a></li></ul></li>
+<li><span class="tag task">Zadanie</span><a href="#czesc-b"><strong>B · Przygotowanie</strong></a>: Sync fork, <code>&lt;lab&gt;3&lt;/lab&gt;</code></li>
+<li><span class="tag task">Zadanie</span><a href="#czesc-c"><strong>C · Relacje w kodzie</strong></a>
+  <ul><li><a href="#c1">C1. Wiele-do-jednego</a> (ocena 3 i 4) · <a href="#c2">C2. Jeden-do-wielu</a> (ocena 4) · <a href="#c3">C3. Jeden-do-jednego</a> (ocena 4)</li></ul></li>
+<li><span class="tag task">Zadanie</span><a href="#czesc-d"><strong>D · Dane powiązane</strong></a> (ocena 3) · <a href="#bledy">typowe błędy przy starcie</a></li>
+<li><span class="tag task">Zadanie</span><a href="#czesc-e"><strong>E · Skończony schemat</strong></a> (ocena 4)
+  <ul><li><a href="#e1">E1. Ile tabel i kolumn</a> · <a href="#e2">E2. Relacja wiele-do-wielu</a> · <a href="#e3">E3. Plik SCHEMAT.md</a></li></ul></li>
+<li><span class="tag task">Zadanie</span><a href="#czesc-f"><strong>F · LAZY i repozytorium</strong></a> (ocena 5)</li>
+<li><span class="tag task">Zadanie</span><a href="#czesc-g"><strong>G · Oddanie i kryteria oceny</strong></a>: <a href="#ocena">ocena z przebiegu</a> · <a href="#kryteria">tabela kryteriów</a></li>
+</ol>
+<details class="part theory" id="czesc-a">
+<summary><h2><span class="tag theory">Teoria</span>A · Rodzaje relacji</h2></summary>
+<p>Powiązanie dwóch tabel to <strong>klucz obcy</strong>: kolumna, która przechowuje <code>id</code> wiersza z innej tabeli.
+W JPA klucz obcy to pole typu encji, a nie <code>Long</code>.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Relacja</th>
+<th>Przykład</th>
+<th>W JPA</th>
+<th>Gdzie jest klucz obcy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>wiele-do-jednego</td>
+<td>wiele rezerwacji → jeden stolik</td>
+<td><code>@ManyToOne</code> + <code>@JoinColumn</code> w encji podrzędnej</td>
+<td>po stronie „wiele”: <code>reservation.table_id</code></td>
+</tr>
+<tr>
+<td>jeden-do-wielu</td>
+<td>stolik → jego rezerwacje</td>
+<td><code>@OneToMany(mappedBy = "table")</code> + lista w encji nadrzędnej</td>
+<td>nigdzie nowego: to drugi koniec tej samej relacji</td>
+</tr>
+<tr>
+<td>jeden-do-jednego</td>
+<td>gość ↔ jego konto użytkownika</td>
+<td><code>@OneToOne</code> + <code>@JoinColumn</code></td>
+<td>w tabeli, która wskazuje: <code>guest.user_account_id</code> (kolumna unikalna)</td>
+</tr>
+<tr>
+<td>wiele-do-wielu</td>
+<td>rezerwacja ↔ dodatki (tort, kwiaty)</td>
+<td>encja łącząca z dwiema <code>@ManyToOne</code> albo <code>@ManyToMany</code> + <code>@JoinTable</code></td>
+<td>w trzeciej tabeli, łączącej: <code>reservation_extra.reservation_id</code> i <code>extra_id</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Rezerwacja</strong> wskazuje na gościa i na stolik (dwie relacje wiele-do-jednego):</p>
+<pre><code>@ManyToOne(fetch = FetchType.LAZY, optional = false)
+@JoinColumn(name = "guest_id", nullable = false)
+private Guest guest;
+
+@ManyToOne(fetch = FetchType.LAZY, optional = false)
+@JoinColumn(name = "table_id", nullable = false)
+private CafeTable table;
+</code></pre>
+<p><strong>Stolik</strong> ma stronę odwrotną tej relacji. Wartość <code>mappedBy</code> to nazwa pola <code>@ManyToOne</code> w rezerwacji.
+Bez <code>mappedBy</code> Hibernate utworzyłby dodatkową tabelę łączącą, której nikt nie planował:</p>
+<pre><code>@OneToMany(mappedBy = "table")
+private List&lt;Reservation&gt; reservations = new ArrayList&lt;&gt;();
+</code></pre>
+<p><strong>Gość</strong> ma najwyżej jedno konto, a konto należy do jednego gościa. Relacja jest opcjonalna (gość bez konta),
+dlatego nie ma <code>optional = false</code> ani <code>nullable = false</code>:</p>
+<pre><code>@OneToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "user_account_id")
+private UserAccount account;
+</code></pre>
+<p><strong>Dane startowe.</strong> W kolumnie klucza obcego wpisujecie numer wiersza tabeli nadrzędnej (baza numeruje wiersze od 1
+w kolejności poleceń <code>insert</code>). Sekcja tabeli nadrzędnej musi być <strong>wyżej</strong> niż sekcja tabeli podrzędnej:</p>
+<pre><code>-- ===== LAB 02 · guest =====
+-- user_account_id: numer konta z sekcji user_account (1 = Ola, 2 = Kuba)
+insert into guest (full_name, phone, user_account_id) values
+    ('Anna Kowalska',  '600100200', 1),
+    ('Jan Nowak',      null,        2),
+    ('Ewa Wiśniewska', '600500600', null);
+
+-- ===== LAB 03 · reservation =====
+-- guest_id i table_id wskazują wiersze z sekcji powyżej
+insert into reservation
+    (guest_id, table_id, starts_at, party_size, status, deposit) values
+    (1, 1, '2026-11-14 18:00:00', 2, 'NEW',       20.00),
+    (1, 2, '2026-11-15 12:00:00', 4, 'CONFIRMED', 40.00),
+    (2, 2, '2026-11-16 19:00:00', 3, 'NEW',        0.00);
+</code></pre>
+<h3 id="wiele-do-wielu">Jak powstaje relacja wiele-do-wielu</h3>
+<p>Rezerwacja może mieć wiele dodatków (tort, kwiaty), a ten sam dodatek trafia do wielu rezerwacji. Kolumna klucza obcego mieści tylko jeden numer,
+więc nie da się jej wstawić ani do rezerwacji, ani do dodatku. Dlatego powstaje <strong>trzecia tabela, łącząca</strong>.
+Każdy jej wiersz to jedna para: numer rezerwacji i numer dodatku.</p>
+<pre><code>reservation            reservation_extra                extra
+id | starts_at         reservation_id | extra_id        id | name
+ 1 | 14.11 18:00                    1 |        1         1 | Tort
+ 2 | 15.11 12:00                    1 |        2         2 | Kwiaty
+                                    2 |        1
+
+rezerwacja 1 ma tort i kwiaty, rezerwacja 2 ma tort
+tort jest w dwóch rezerwacjach
+</code></pre>
+<p>Tabelę łączącą można zapisać w JPA na dwa sposoby. Dla danej pary tabel wybieracie <strong>jeden</strong>:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th></th>
+<th>Sposób 1: encja łącząca</th>
+<th>Sposób 2: <code>@ManyToMany</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kiedy</td>
+<td>para ma własne dane, np. ilość, uwagi, cenę w chwili zakupu</td>
+<td>para nie ma żadnych własnych danych: liczy się tylko to, że jest</td>
+</tr>
+<tr>
+<td>Co piszecie</td>
+<td>nową klasę encji dla tabeli łączącej</td>
+<td>jedno pole w jednej z dwóch istniejących encji; nowej klasy nie ma</td>
+</tr>
+<tr>
+<td>Kolumny tabeli łączącej</td>
+<td><code>id</code>, dwa klucze obce i kolumny własne</td>
+<td>tylko dwa klucze obce</td>
+</tr>
+</tbody>
+</table></div>
+<p>W bazie oba sposoby dają <strong>tę samą tabelę</strong> <code>reservation_extra</code> z dwoma kluczami obcymi; różni się tylko zapis w Javie.
+Relacja wiele-do-wielu to zawsze dwie relacje wiele-do-jednego spotykające się w tabeli łączącej: wiele wierszy tej tabeli wskazuje jedną rezerwację
+i wiele wskazuje jeden dodatek. W sposobie 1 piszecie tabelę łączącą sami jako encję, więc jej dwa klucze obce widać jako dwa pola <code>@ManyToOne</code>.
+W sposobie 2 tabelę łączącą tworzy Hibernate, a w kodzie zostaje jedno pole <code>@ManyToMany</code>, które ją opisuje.</p>
+<h3 id="sposob-1">Sposób 1: encja łącząca</h3>
+<ol>
+<li>Tworzycie <strong>nową klasę encji</strong> nazwaną od pary, np. <code>ReservationExtra</code> z tabelą <code>reservation_extra</code>, w pakiecie <code>entity</code> modułu.</li>
+<li>Dopisujecie w niej <strong>dwa pola <code>@ManyToOne</code></strong>, po jednym do każdej z łączonych tabel. Każde tworzy jedną kolumnę klucza obcego.
+   Oba są wymagane (<code>nullable = false</code>), bo para bez jednej ze stron nie ma sensu.</li>
+<li>Dopisujecie <strong>kolumny własne pary</strong>, np. ilość i uwagi.</li>
+<li>W encjach <code>Reservation</code> i <code>Extra</code> niczego nie zmieniacie.</li>
+</ol>
+<pre><code>@Entity
+@Table(name = "reservation_extra")   // tabela łącząca
+public class ReservationExtra {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    // której rezerwacji dotyczy ten wiersz
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "reservation_id", nullable = false)
+    private Reservation reservation;
+
+    // który dodatek został wybrany
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "extra_id", nullable = false)
+    private Extra extra;
+
+    // dane własne pary: ile sztuk
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+
+    // dane własne pary: uwagi
+    @Column(name = "note", length = 120)
+    private String note;
+
+    protected ReservationExtra() {
+    }
+}
+</code></pre>
+<p>Encja łącząca jest zwykłą tabelą: obowiązują ją reguły LAB 02 (co najmniej 4 kolumny poza <code>id</code>, tutaj dwa klucze obce i dwie kolumny własne,
+oraz co najmniej 3 wiersze danych). Dane wpisujecie <strong>pod</strong> sekcjami obu łączonych tabel:</p>
+<pre><code>-- ===== LAB 03 · reservation_extra =====
+insert into reservation_extra (reservation_id, extra_id, quantity, note) values
+    (1, 1, 1, null),            -- rezerwacja 1: tort, 1 sztuka
+    (1, 2, 2, 'róże'),          -- rezerwacja 1: kwiaty, 2 sztuki
+    (2, 1, 1, null);            -- rezerwacja 2: tort, 1 sztuka
+</code></pre>
+<h3 id="sposob-2">Sposób 2: @ManyToMany</h3>
+<ol>
+<li><strong>Nie tworzycie nowej klasy.</strong> Wybieracie jedną z dwóch encji, zwykle tę, od której czytacie relację („rezerwacja ma dodatki”), tutaj <code>Reservation</code>.</li>
+<li>Dopisujecie w niej <strong>jedno pole: zbiór obiektów drugiej encji</strong>.</li>
+<li>W drugiej encji (<code>Extra</code>) niczego nie dopisujecie.</li>
+<li>Tabelę łączącą Hibernate tworzy sam, według opisu w <code>@JoinTable</code>.</li>
+</ol>
+<pre><code>// w klasie Reservation, obok pozostałych pól
+@ManyToMany
+@JoinTable(name = "reservation_extra",
+        joinColumns = @JoinColumn(name = "reservation_id"),
+        inverseJoinColumns = @JoinColumn(name = "extra_id"))
+private Set&lt;Extra&gt; extras = new HashSet&lt;&gt;();
+</code></pre>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Znaczenie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@ManyToMany</code></td>
+<td>rezerwacja ma wiele dodatków, a dodatek może należeć do wielu rezerwacji</td>
+</tr>
+<tr>
+<td><code>@JoinTable(name = "reservation_extra")</code></td>
+<td>nazwa tabeli łączącej, którą Hibernate utworzy w bazie. Tej tabeli nie odpowiada żadna klasa</td>
+</tr>
+<tr>
+<td><code>joinColumns = @JoinColumn(name = "reservation_id")</code></td>
+<td>kolumna tabeli łączącej, która wskazuje na <strong>tę</strong> encję, czyli tę, w której piszecie pole (<code>Reservation</code>)</td>
+</tr>
+<tr>
+<td><code>inverseJoinColumns = @JoinColumn(name = "extra_id")</code></td>
+<td>kolumna tabeli łączącej, która wskazuje na <strong>drugą</strong> encję, czyli typ w nawiasach ostrych (<code>Extra</code>)</td>
+</tr>
+<tr>
+<td><code>Set&lt;Extra&gt; extras = new HashSet&lt;&gt;()</code></td>
+<td>w Javie rezerwacja trzyma zbiór swoich dodatków. <code>Set</code>, a nie <code>List</code>, bo ta sama para nie może wystąpić dwa razy</td>
+</tr>
+</tbody>
+</table></div>
+<p>Po uruchomieniu aplikacji w logu jest tabela, której nie ma w kodzie jako klasy:</p>
+<pre><code>create table reservation_extra (
+    extra_id bigint not null,
+    reservation_id bigint not null,
+    primary key (extra_id, reservation_id)
+)
+</code></pre>
+<p>Dane tej tabeli to same pary numerów wierszy, wpisane <strong>pod</strong> sekcjami obu łączonych tabel:</p>
+<pre><code>-- ===== LAB 03 · reservation_extra =====
+insert into reservation_extra (reservation_id, extra_id) values
+    (1, 1),                     -- rezerwacja 1: tort
+    (1, 2),                     -- rezerwacja 1: kwiaty
+    (2, 1);                     -- rezerwacja 2: tort
+</code></pre>
+</details>
+<details class="part task" id="czesc-b">
+<summary><h2><span class="tag task">Zadanie</span>B · Przygotowanie</h2></summary>
+<ol>
+<li>Na stronie forka na GitHubie: <strong>Sync fork → Update branch</strong>, potem w IntelliJ <em>Git → Pull</em>.
+   Przy konflikcie nie klikajcie <em>Discard commits</em> (to usuwa Waszą pracę); zgłoście konflikt prowadzącemu.</li>
+<li>W <code>pom.xml</code> zmieńcie <code>&lt;lab&gt;2&lt;/lab&gt;</code> na <code>&lt;lab&gt;3&lt;/lab&gt;</code>, potem <em>Commit</em> i <em>Push</em>.
+   Od tej chwili <em>Maven → Lifecycle → verify</em> uruchamia też reguły LAB 03; czerwone reguły to lista zadań.</li>
+<li>Nie edytujecie <code>src/test/java/pl/wsb/rules</code> ani <code>.github/workflows</code>.</li>
+</ol>
+</details>
+<details class="part task" id="czesc-c">
+<summary><h2><span class="tag task">Zadanie</span>C · Relacje w kodzie</h2></summary>
+<p>Na ocenę 3 wystarcza C1 z jedną relacją i dane z części D. Na ocenę 4 potrzebne są wszystkie trzy rodzaje relacji: C1 (dwie relacje), C2 i C3.</p>
+<h3 id="c1">C1. Wiele-do-jednego: jedna relacja na ocenę 3 (R3.01), dwie na ocenę 4 (R3.03)</h3>
+<p>W encji podrzędnej (strona „wiele”) dopiszcie pole typu encji nadrzędnej:</p>
+<pre><code>@ManyToOne(fetch = FetchType.LAZY, optional = false)
+@JoinColumn(name = "&lt;tabela_nadrzędna&gt;_id", nullable = false)
+private &lt;EncjaNadrzędna&gt; &lt;pole&gt;;
+</code></pre>
+<p>Relacja opcjonalna nie ma <code>optional = false</code> ani <code>nullable = false</code>. Pole dodajcie do konstruktora i wygenerujcie getter.</p>
+<h3 id="c2">C2. Jeden-do-wielu: co najmniej jedna relacja, ocena 4 (R3.04)</h3>
+<p>W encji nadrzędnej dopiszcie listę wierszy podrzędnych. Są dwa poprawne zapisy.</p>
+<p><strong>Relacja dwukierunkowa</strong> (zalecana): encja podrzędna ma już pole <code>@ManyToOne</code> z C1, a lista jest drugim końcem tej samej relacji.
+<code>mappedBy</code> to nazwa tego pola. Lista nie tworzy kolumny i nie wymaga danych w <code>data.sql</code>:</p>
+<pre><code>// w encji nadrzędnej, np. CafeTable
+// w Reservation jest pole: private CafeTable table
+@OneToMany(mappedBy = "&lt;pole @ManyToOne w encji podrzędnej&gt;")
+private List&lt;&lt;EncjaPodrzędna&gt;&gt; &lt;pole&gt; = new ArrayList&lt;&gt;();
+</code></pre>
+<p><strong>Relacja jednokierunkowa</strong>: encja podrzędna <strong>nie ma</strong> pola <code>@ManyToOne</code> i nie wie o nadrzędnej, np. zamówienie zna swoje pozycje,
+a pozycja nie ma pola „zamówienie”. Wtedy zamiast <code>mappedBy</code> podajecie przy liście nazwę kolumny klucza obcego. Kolumna powstaje w tabeli podrzędnej,
+więc w <code>data.sql</code> wpisujecie ją w <code>insert</code> tabeli podrzędnej:</p>
+<pre><code>// w encji nadrzędnej, np. Order; klasa OrderLine nie ma pola typu Order
+@OneToMany
+// kolumna klucza obcego, np. order_id w tabeli order_line
+@JoinColumn(name = "&lt;tabela_nadrzędna&gt;_id")
+private List&lt;&lt;EncjaPodrzędna&gt;&gt; &lt;pole&gt; = new ArrayList&lt;&gt;();
+</code></pre>
+<p><code>@OneToMany</code> bez <code>mappedBy</code> i bez <code>@JoinColumn</code> jest błędem: Hibernate tworzy wtedy dodatkową tabelę łączącą, której nie planowaliście.</p>
+<h3 id="c3">C3. Jeden-do-jednego: co najmniej jedna relacja, ocena 4 (R3.05)</h3>
+<p>Wybierzcie parę obiektów, które występują jeden do jednego (osoba i konto, zamówienie i faktura, pojazd i dowód rejestracyjny):</p>
+<pre><code>@OneToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "&lt;tabela_nadrzędna&gt;_id")
+private &lt;EncjaNadrzędna&gt; &lt;pole&gt;;
+</code></pre>
+<p>Po każdej relacji: klucze obce w <code>data.sql</code> (część D), <em>Rerun</em>, w logu <code>alter table … add constraint … foreign key</code>, potem <em>Commit</em> i <em>Push</em>.</p>
+</details>
+<details class="part task" id="czesc-d">
+<summary><h2><span class="tag task">Zadanie</span>D · Dane powiązane (ocena 3)</h2></summary>
+<ul>
+<li>Do polecenia <code>insert</code> tabeli podrzędnej dopiszcie kolumnę klucza obcego z numerem wiersza tabeli nadrzędnej (wzór w części A).</li>
+<li>Sekcja tabeli nadrzędnej jest wyżej niż sekcja podrzędnej. Dane nowych tabel trafiają do sekcji <code>-- ===== LAB 03 · &lt;tabela&gt; =====</code>.</li>
+<li>Każda relacja <code>@ManyToOne</code> i <code>@OneToOne</code> ma co najmniej jeden wiersz z wypełnionym kluczem obcym (R3.02).</li>
+<li>W relacji <code>@OneToOne</code> dwa wiersze nie mogą wskazywać tego samego wiersza nadrzędnego.</li>
+<li>Dane wpisujecie zwykłymi poleceniami <code>insert</code> z numerami wierszy. Zapytań z <code>join</code> ani podzapytań nie trzeba pisać.</li>
+<li>Sprawdzenie w konsoli H2 (<strong>http://localhost:8080/h2-console</strong>, JDBC URL <code>jdbc:h2:file:./data/wdtb</code>, użytkownik <code>sa</code>):
+   <code>select * from &lt;tabela_podrzędna&gt;</code> pokazuje wypełnione kolumny kluczy obcych.</li>
+</ul>
+<h3 id="bledy">Typowe błędy przy starcie</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Komunikat w logu</th>
+<th>Przyczyna</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Referential integrity constraint violation</code></td>
+<td>klucz obcy wskazuje wiersz, którego jeszcze nie ma: sekcja podrzędna nad nadrzędną albo za duży numer wiersza</td>
+</tr>
+<tr>
+<td><code>NULL not allowed for column "…_ID"</code></td>
+<td>kolumna klucza obcego z <code>nullable = false</code> pominięta w <code>insert</code></td>
+</tr>
+<tr>
+<td><code>Column "…_ID" not found</code></td>
+<td>nazwa kolumny w <code>insert</code> różni się od <code>@JoinColumn(name)</code></td>
+</tr>
+<tr>
+<td><code>Unique index or primary key violation</code></td>
+<td>dwa wiersze wskazują ten sam wiersz w relacji <code>@OneToOne</code></td>
+</tr>
+<tr>
+<td><code>Unknown mappedBy in: …</code></td>
+<td><code>mappedBy</code> nie jest nazwą pola <code>@ManyToOne</code> w encji podrzędnej</td>
+</tr>
+</tbody>
+</table></div>
+<p>Błąd w <code>data.sql</code> zatrzymuje start aplikacji. Czytajcie log od pierwszej linii z <code>Caused by</code>: tam jest nazwa tabeli i kolumny.</p>
+</details>
+<details class="part task" id="czesc-e">
+<summary><h2><span class="tag task">Zadanie</span>E · Skończony schemat (ocena 4)</h2></summary>
+<h3 id="e1">E1. Ile tabel i kolumn</h3>
+<p>Skończony schemat to wszystkie tabele, których potrzebuje Wasz pomysł, a nie tylko trzy tabele z LAB 02. Minimum sprawdzane przez reguły:</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Minimum</th>
+<th>Reguła</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>własne tabele</td>
+<td>5 (bez <code>user_account</code>; tabela łącząca wiele-do-wielu się liczy)</td>
+<td>R3.07</td>
+</tr>
+<tr>
+<td>kolumny w każdej encji</td>
+<td>4 poza <code>id</code> (kolumny kluczy obcych się liczą), w tym co najmniej jedna wymagana</td>
+<td>R2.04, R2.05</td>
+</tr>
+<tr>
+<td>wiersze w <code>data.sql</code></td>
+<td>3 w każdej tabeli</td>
+<td>R2.03</td>
+</tr>
+<tr>
+<td>relacje</td>
+<td>2 × <code>@ManyToOne</code>, 1 × <code>@OneToMany</code>, 1 × <code>@OneToOne</code>, 1 × wiele-do-wielu</td>
+<td>R3.03–R3.05, R3.09</td>
+</tr>
+<tr>
+<td>połączenia</td>
+<td>żadna tabela nie zostaje bez relacji; co najmniej jedna encja wskazuje na <code>UserAccount</code></td>
+<td>R3.06, R3.08</td>
+</tr>
+</tbody>
+</table></div>
+<p>Nowa tabela to nowa encja według <a href="lab02.html">LAB 02</a>. Relacja do konta (R3.06): pole <code>@OneToOne</code> albo <code>@ManyToOne</code> typu <code>UserAccount</code>
+z pakietu <code>pl.wsb.&lt;projekt&gt;.account.domain</code>, kolumna <code>user_account_id</code>; może to być jedna z relacji z części C. Klasy <code>UserAccount</code> nie zmieniacie.</p>
+<h3 id="e2">E2. Relacja wiele-do-wielu (R3.09)</h3>
+<ol>
+<li>Wybierzcie parę tabel z opisu pomysłu, w której obie strony mają „wiele” (zamówienie ↔ produkty, uczestnik ↔ wydarzenia).</li>
+<li>Zdecydujcie, czy para ma własne dane. Jeśli tak: encja łącząca (sposób 1 z części A). Jeśli nie: <code>@ManyToMany</code> z <code>@JoinTable</code> (sposób 2).</li>
+<li>Dopiszcie dane tabeli łączącej w <code>data.sql</code>, pod sekcjami obu tabel nadrzędnych, co najmniej 3 wiersze.</li>
+<li><em>Rerun</em>: w logu jest <code>create table &lt;tabela_łącząca&gt;</code> z dwiema kolumnami kluczy obcych i dwa polecenia <code>alter table … foreign key</code>.</li>
+</ol>
+<h3 id="e3">E3. Schemat widoczny w repozytorium: SCHEMAT.md (R3.10)</h3>
+<p>Schemat ma być widoczny bez uruchamiania aplikacji. Nie rysujecie go ręcznie: reguły generują go z Waszych encji.</p>
+<ol>
+<li>Panel <em>Maven</em> → <em>Lifecycle</em> → dwuklik na <em>verify</em>. W katalogu głównym projektu powstaje plik <code>SCHEMAT.md</code>:
+   lista tabel z liczbą kolumn i kluczami obcymi oraz diagram ER.</li>
+<li><em>Git → Commit</em> (zaznaczcie <code>SCHEMAT.md</code>), <em>Push</em>.</li>
+<li>Na GitHubie otwórzcie <code>SCHEMAT.md</code> na stronie repozytorium: GitHub rysuje diagram. Ten sam diagram jest w <em>Summary</em> każdego przebiegu „Testy i reguły”.</li>
+<li>Po każdej zmianie encji powtórzcie kroki 1–2. Plik niezgodny z kodem oznacza czerwoną regułę R3.10 w GitHub Actions.</li>
+</ol>
+<p>Fragment pliku dla przykładu kawiarni:</p>
+<pre><code>erDiagram
+    reservation {
+        Long id PK
+        BigDecimal deposit
+        Long guest_id FK
+        Long table_id FK
+    }
+    cafe_table ||--o{ reservation : "table_id"
+    guest ||--o{ reservation : "guest_id"
+    user_account |o--o| guest : "user_account_id"
+</code></pre>
+<p>Sprawdźcie diagram z opisem pomysłu: czy są wszystkie obiekty biznesowe i czy linie między tabelami odpowiadają temu, jak te obiekty są powiązane.</p>
+</details>
+<details class="part task" id="czesc-f">
+<summary><h2><span class="tag task">Zadanie</span>F · LAZY i repozytorium (ocena 5)</h2></summary>
+<ul>
+<li><strong>LAZY (R3.11).</strong> Każde <code>@ManyToOne</code> i <code>@OneToOne</code> ma <code>fetch = FetchType.LAZY</code>: wiersz nadrzędny jest pobierany dopiero wtedy, gdy kod o niego zapyta.</li>
+<li><strong>Repozytorium (R3.12).</strong> Interfejs w pakiecie <code>pl.wsb.&lt;projekt&gt;.&lt;moduł&gt;.repository</code> z zapytaniem, którego nazwa prowadzi przez relację:
+<pre><code>public interface &lt;Encja&gt;Repository extends JpaRepository&lt;&lt;Encja&gt;, Long&gt; {
+
+    List&lt;&lt;Encja&gt;&gt; findBy&lt;PoleRelacji&gt;_&lt;PoleEncjiNadrzędnej&gt;(&lt;typ&gt; wartość);
+}
+</code></pre>
+   Przykład nazwy: <code>findByGuest_FullName(String fullName)</code>. Spring Data sprawdza nazwę przy starcie aplikacji
+   (<code>No property … found</code> oznacza literówkę).</li>
+</ul>
+</details>
+<details class="part task" id="czesc-g">
+<summary><h2><span class="tag task">Zadanie</span>G · Oddanie i kryteria oceny</h2></summary>
+<ol>
+<li><strong>Reguły lokalnie:</strong> panel <em>Maven</em> → <em>Lifecycle</em> → dwuklik na <em>verify</em>. Przy czerwonej regule jest opis, co poprawić.</li>
+<li><strong>Wizytówka:</strong> w <code>static/index.html</code> dopiszcie do listy zmian, co powstało na LAB 03. <em>Commit</em>, <em>Push</em>.</li>
+<li><strong>Oddanie tagiem <code>lab-3</code>:</strong> okno <em>Git</em> → zakładka <em>Log</em> → prawy przycisk na ostatnim commicie → <em>New Tag…</em> → <code>lab-3</code>,
+   potem <em>Git → Push</em> z zaznaczonym <em>Push Tags</em>. Tag uruchamia przebieg „Testy i reguły” z regułami LAB 03.</li>
+<li><strong>Sprawdzenie:</strong> zakładka <em>Actions</em> na GitHubie → przebieg dla tagu <code>lab-3</code>. W <em>Summary</em> jest lista reguł do poprawy i diagram schematu.
+   Poprawka przed terminem: nowy tag, np. <code>lab-3-poprawa</code>; liczy się ostatni tag wypchnięty w terminie.</li>
+</ol>
+<p>Zespół, który skończy na zajęciach, pokazuje przebieg prowadzącemu przy stanowisku. Pozostałe zespoły kończą w domu; prowadzący ocenia ich prace po terminie (niedziela 22 listopada 2026, godz. 23:59)
+z przebiegu dla tagu.</p>
+<blockquote>
+<p><strong>Nie musicie informować prowadzącego o oddaniu.</strong> Jeśli repozytorium jest publiczne, wystarczy tag <code>lab-3</code> wypchnięty w terminie:
+prowadzący sam otwiera przebieg z linku w arkuszu zespołów. Jeśli repozytorium jest prywatne, prowadzący musi mieć do niego dostęp:
+na GitHubie <em>Settings → Collaborators → Add people</em> → <code>wkoszela</code>, przed upływem terminu. Bez dostępu zadania nie da się ocenić.</p>
+</blockquote>
+<h3 id="ocena">Ocena z przebiegu</h3>
+<p>Przebieg „Testy i reguły” ma trzy etapy. Każdy kolejny uruchamia się dopiero po zielonym poprzednim.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Wynik przebiegu dla tagu <code>lab-3</code></th>
+<th>Ocena</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>etap „Ocena 3” czerwony albo brak tagu <code>lab-3</code> do niedzieli 22 listopada 2026, godz. 23:59</td>
+<td><strong>brak zaliczenia</strong> (poprawa na LAB 07)</td>
+</tr>
+<tr>
+<td>etap „Ocena 3” zielony, etap „Ocena 4” czerwony</td>
+<td><strong>3</strong></td>
+</tr>
+<tr>
+<td>etapy „Ocena 3” i „Ocena 4” zielone, etap „Ocena 5” czerwony</td>
+<td><strong>4</strong></td>
+</tr>
+<tr>
+<td>wszystkie trzy etapy zielone</td>
+<td><strong>5</strong></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="kryteria">Kryteria</h3>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Kryterium</th>
+<th>Wymagane na ocenę</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LAB 01–02</td>
+<td>wszystkie reguły R1.xx i R2.01–R2.05 nadal zielone (warunek przystąpienia)</td>
+<td>3, 4 i 5</td>
+</tr>
+<tr>
+<td>R3.01</td>
+<td>co najmniej 1 relacja <code>@ManyToOne</code>, każda z <code>@JoinColumn(name = "…_id")</code></td>
+<td>3, 4 i 5</td>
+</tr>
+<tr>
+<td>R3.02</td>
+<td>aplikacja startuje na czystej bazie, a każda relacja <code>@ManyToOne</code> i <code>@OneToOne</code> ma w <code>data.sql</code> wiersz z wypełnionym kluczem obcym</td>
+<td>3, 4 i 5</td>
+</tr>
+<tr>
+<td>R3.03</td>
+<td>co najmniej 2 relacje <code>@ManyToOne</code></td>
+<td>4 i 5</td>
+</tr>
+<tr>
+<td>R3.04</td>
+<td>co najmniej 1 relacja <code>@OneToMany</code>, każda z <code>mappedBy</code> albo <code>@JoinColumn</code></td>
+<td>4 i 5</td>
+</tr>
+<tr>
+<td>R3.05</td>
+<td>co najmniej 1 relacja <code>@OneToOne</code>, po stronie klucza obcego z <code>@JoinColumn(name = "…_id")</code></td>
+<td>4 i 5</td>
+</tr>
+<tr>
+<td>R3.06</td>
+<td>co najmniej jedna własna encja wskazuje na <code>UserAccount</code></td>
+<td>4 i 5</td>
+</tr>
+<tr>
+<td>R3.07</td>
+<td>co najmniej 5 własnych tabel (z tabelą łączącą wiele-do-wielu)</td>
+<td>4 i 5</td>
+</tr>
+<tr>
+<td>R3.08</td>
+<td>każda własna tabela jest połączona relacją z inną tabelą</td>
+<td>4 i 5</td>
+</tr>
+<tr>
+<td>R3.09</td>
+<td>relacja wiele-do-wielu: encja łącząca z dwiema <code>@ManyToOne</code> albo <code>@ManyToMany</code> z <code>@JoinTable(name)</code></td>
+<td>4 i 5</td>
+</tr>
+<tr>
+<td>R3.10</td>
+<td>plik <code>SCHEMAT.md</code> w katalogu głównym projektu, zgodny z encjami w kodzie</td>
+<td>4 i 5</td>
+</tr>
+<tr>
+<td>R3.11</td>
+<td>każde <code>@ManyToOne</code> i <code>@OneToOne</code> ma <code>fetch = FetchType.LAZY</code></td>
+<td>5</td>
+</tr>
+<tr>
+<td>R3.12</td>
+<td>interfejs <code>JpaRepository</code> w pakiecie <code>&lt;moduł&gt;.repository</code> z zapytaniem pochodnym przez relację</td>
+<td>5</td>
+</tr>
+</tbody>
+</table></div>
+<p>Reguły sprawdzają budowę schematu, a nie jego sens. Prowadzący ogląda <code>SCHEMAT.md</code> i może obniżyć ocenę, gdy schemat
+nie odpowiada pomysłowi z wizytówki albo dane powiązane są przypadkowe. Może też poprosić dowolną osobę z zespołu o wyjaśnienie wskazanej relacji.</p>
+</details>
+</article></main>
+
+<footer>
+  <span>Wprowadzenie do technologii backendowych · laboratoria</span>
+  <span class="author">Materiały przygotował: <b>Wojciech Koszela</b>, prowadzący<a class="social li" href="https://www.linkedin.com/in/wkoszela/" target="_blank" rel="noopener" aria-label="Wojciech Koszela na LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a><a class="social gh" href="https://github.com/wkoszela" target="_blank" rel="noopener" aria-label="wkoszela na GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a><a class="social mail" href="mailto:wojciech.koszela@wroclaw.merito.pl" aria-label="E-mail do prowadzącego"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5v-13zm2.2.5 7.8 6.1L19.8 6H4.2zM20 7.9l-7.4 5.8a1 1 0 0 1-1.2 0L4 7.9V18h16V7.9z"/></svg>wojciech.koszela@wroclaw.merito.pl</a></span>
+  <span class="logo"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></span>
+</footer>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, btn = document.querySelector('.theme-toggle');
+  if (!btn) return;
+  function current() {
+    return root.getAttribute('data-theme') ||
+      (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  }
+  function label() { btn.textContent = current() === 'dark' ? '☀ Jasny' : '☾ Ciemny'; }
+  btn.addEventListener('click', function () {
+    var next = current() === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('wdtb-theme', next); } catch (e) {}
+    label();
+  });
+  label();
+})();
+</script>
+<script>
+(function () {
+  var parts = Array.prototype.slice.call(document.querySelectorAll('details.part'));
+  if (!parts.length) return;
+  function reveal() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    var target = id && document.getElementById(id);
+    if (!target) return;
+    var part = target.closest('details.part');
+    if (part && !part.open) part.open = true;
+    target.scrollIntoView();
+  }
+  window.addEventListener('hashchange', reveal);
+  reveal();
+  document.querySelectorAll('[data-parts]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      var open = button.getAttribute('data-parts') === 'open';
+      parts.forEach(function (part) { part.open = open; });
+    });
+  });
+  window.addEventListener('beforeprint', function () { parts.forEach(function (part) { part.open = true; }); });
+})();
+</script>
+</body>
+</html>

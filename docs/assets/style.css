@@ -203,3 +203,21 @@ nav.jump .disabled { font: 500 13px/1 var(--font-body); color: var(--ink); paddi
 .md .tag.task { color: var(--ok); }
 .md .legend { color: var(--muted); font-size: 14.5px; }
 @media (max-width: 560px) { .md .part { padding-left: 12px; } .md .part.theory { padding: 14px 12px; } }
+
+/* Zwijane części instrukcji (details.part) i spis treści z odnośnikami */
+.md details.part > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 10px; }
+.md details.part > summary::-webkit-details-marker { display: none; }
+.md details.part > summary::before { content: "▸"; color: var(--muted); font-size: 18px; line-height: 1; transition: transform .15s; }
+.md details.part[open] > summary::before { transform: rotate(90deg); }
+.md details.part > summary h2 { margin: 0; padding: 0; border-top: 0; }
+.md details.part > summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; border-radius: 6px; }
+.md details.part:not([open]) { padding-top: 10px; padding-bottom: 10px; }
+.md details.part, .md details.part h3[id] { scroll-margin-top: 16px; }
+.md .toc ul { margin: 6px 0 0; padding-left: 0; list-style: none; font-size: 14.5px; color: var(--muted); }
+.md .toc a { text-decoration: none; }
+.md .toc a:hover, .md .toc a:focus-visible { text-decoration: underline; }
+.md .toc-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.md .toc-actions button { font: inherit; font-size: 14px; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); cursor: pointer; }
+.md .toc-actions button:hover { border-color: var(--blue); }
+@media print { .md .toc-actions { display: none; } }

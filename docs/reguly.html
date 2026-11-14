@@ -14,7 +14,7 @@
 <div class="wrap">
 <div class="top">
   <a class="logo" href="index.html"><img src="assets/merito-logo.png" alt="Uniwersytet WSB Merito Wrocław"></a>
-  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html">LAB 02</a><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html" aria-current="page">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
+  <nav class="jump" aria-label="Dokumentacja"><a href="index.html">Start</a><a href="lab01.html">LAB 01</a><a href="lab02.html">LAB 02</a><a href="lab03.html">LAB 03</a><a href="wymagania.html">Wymagania</a><a href="zasady.html">Zasady</a><a href="reguly.html" aria-current="page">Reguły</a><a href="pomysl.html">Pomysł</a><a href="zespol.html">Praca w zespole</a><a href="roadmapa.html">Roadmapa</a><button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny lub ciemny">Motyw</button></nav>
 </div>
 <main class="doc"><article class="md">
 <h1>Reguły projektu</h1>
@@ -136,6 +136,69 @@ pl.wsb.&lt;projekt&gt;.shared | common | config moduły wspólne, dostępne dla 
 <p>R2.01–R2.05 działają w etapie „Ocena 4”, R2.06–R2.07 w etapie „Ocena 5” (uruchamianym po zielonym etapie „Ocena 4”).
 R2.03 uruchamia aplikację, pozostałe czytają skompilowane klasy (ArchUnit). Autotest w
 <code>src/test/java/pl/wsb/rules/lab02</code> sprawdza je na przykładzie kawiarni i na celowo błędnym modelu.</p>
+<h2>LAB 03 · Relacje między tabelami</h2>
+<p>Instrukcja: <a href="lab03.html">LAB 03</a>.</p>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Reguła</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R3.01</td>
+<td>Co najmniej 1 relacja <code>@ManyToOne</code>, każda z <code>@JoinColumn(name = "…_id")</code></td>
+</tr>
+<tr>
+<td>R3.02</td>
+<td>Aplikacja startuje na czystej bazie, a każda relacja <code>@ManyToOne</code> i <code>@OneToOne</code> ma w <code>data.sql</code> wiersz z wypełnionym kluczem obcym</td>
+</tr>
+<tr>
+<td>R3.03</td>
+<td><strong>Ocena 4:</strong> co najmniej 2 relacje <code>@ManyToOne</code></td>
+</tr>
+<tr>
+<td>R3.04</td>
+<td><strong>Ocena 4:</strong> co najmniej 1 relacja <code>@OneToMany</code>, każda z <code>mappedBy</code> albo <code>@JoinColumn</code></td>
+</tr>
+<tr>
+<td>R3.05</td>
+<td><strong>Ocena 4:</strong> co najmniej 1 relacja <code>@OneToOne</code>, po stronie klucza obcego z <code>@JoinColumn(name = "…_id")</code></td>
+</tr>
+<tr>
+<td>R3.06</td>
+<td><strong>Ocena 4:</strong> co najmniej jedna własna encja wskazuje na <code>UserAccount</code></td>
+</tr>
+<tr>
+<td>R3.07</td>
+<td><strong>Ocena 4:</strong> co najmniej 5 własnych tabel (z tabelą łączącą wiele-do-wielu)</td>
+</tr>
+<tr>
+<td>R3.08</td>
+<td><strong>Ocena 4:</strong> każda własna tabela jest połączona relacją z inną tabelą</td>
+</tr>
+<tr>
+<td>R3.09</td>
+<td><strong>Ocena 4:</strong> relacja wiele-do-wielu: encja łącząca z dwiema <code>@ManyToOne</code> albo <code>@ManyToMany</code> z <code>@JoinTable(name)</code></td>
+</tr>
+<tr>
+<td>R3.10</td>
+<td><strong>Ocena 4:</strong> plik <code>SCHEMAT.md</code> w katalogu głównym projektu, zgodny z encjami w kodzie</td>
+</tr>
+<tr>
+<td>R3.11</td>
+<td><strong>Ocena 5:</strong> każde <code>@ManyToOne</code> i <code>@OneToOne</code> ma <code>fetch = FetchType.LAZY</code></td>
+</tr>
+<tr>
+<td>R3.12</td>
+<td><strong>Ocena 5:</strong> interfejs <code>JpaRepository</code> w pakiecie <code>&lt;moduł&gt;.repository</code> z zapytaniem pochodnym przez relację</td>
+</tr>
+</tbody>
+</table></div>
+<p>Od LAB 03 przebieg ma dodatkowy, pierwszy etap „Ocena 3”: R3.01–R3.02 działają w etapie „Ocena 3”, R3.03–R3.10 w etapie „Ocena 4”, R3.11–R3.12 w etapie „Ocena 5”. R3.02 uruchamia aplikację, pozostałe czytają
+skompilowane klasy (ArchUnit). Autotest w <code>src/test/java/pl/wsb/rules/lab03</code> sprawdza je na przykładzie kawiarni
+i na celowo błędnym modelu.</p>
 <p>Reguły kolejnych laboratoriów pojawią się w szablonie przed danymi zajęciami.</p>
 </article></main>
 <footer>
