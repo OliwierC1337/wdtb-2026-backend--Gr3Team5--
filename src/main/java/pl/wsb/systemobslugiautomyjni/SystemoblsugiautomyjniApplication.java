@@ -11,9 +11,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Reguła R1.01 sprawdza, czy to zrobiliście.
  */
 @SpringBootApplication
-public class systemoblsugiautomyjniApplication {
+public class SystemoblsugiautomyjniApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(systemoblsugiautomyjniApplication.class, args);
+        SpringApplication.run(SystemoblsugiautomyjniApplication.class, args);
     }
 }
