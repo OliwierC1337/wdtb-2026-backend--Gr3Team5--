@@ -1,7 +1,7 @@
 package pl.wsb.systemobslugiautomyjni.usage.entity;
 
 import jakarta.persistence.*;
-
+import pl.wsb.systemobslugiautomyjni.products.entity.products;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -24,15 +24,18 @@ public class usage {
 
     @Column(name = "used_at", nullable = false)
     private LocalDateTime used_at;
-
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
+    private products product;
 
 
 
     protected usage() {
     }
 
-    public usage(Long id, String product_name, BigDecimal quantity_used, String unit, LocalDateTime used_at) {
+    public usage(Long id, products product, String product_name, BigDecimal quantity_used, String unit, LocalDateTime used_at) {
         this.id = id;
+        this.product = product;
         this.product_name = product_name;
         this.quantity_used = quantity_used;
         this.unit = unit;
@@ -57,5 +60,10 @@ public class usage {
 
     public LocalDateTime getUsed_at() {
         return used_at;
+    }
+
+
+    public products getProduct() {
+        return product;
     }
 }
