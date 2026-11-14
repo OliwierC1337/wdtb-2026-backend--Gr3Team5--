@@ -32,7 +32,3 @@ VALUES
 – ===== LAB 03 · notifications =====
 – product_id jest opcjonalne: NULL, gdy powiadomienie nie dotyczy konkretnego produktu
 INSERT INTO notifications (product_id, type, message, is_sent, created_at, sent_at)
-VALUES
-(NULL, 'INFO’, 'Myjnia została uruchomiona.’, TRUE, '2026-10-24 08:30:00’, '2026-10-24 08:30:05'),
-(3, 'WARNING’, 'Niski stan: płyn do szyb (2.5 l).’, FALSE, '2026-10-24 09:15:00’, NULL),
-(NULL, 'SUCCESS’, 'Mycie pojazdu zostało zakończone.’, TRUE, '2026-10-24 10:00:00’, '2026-10-24 10:00:10');
