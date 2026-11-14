@@ -1,6 +1,6 @@
 package pl.wsb.systemobslugiautomyjni.notifications.entity;
 import jakarta.persistence.*;
-
+import pl.wsb.systemobslugiautomyjni.products.entity.products;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -26,13 +26,16 @@ public class notifications {
 
     @Column(name = "sent_at")
     private LocalDateTime sent_at;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private products product;
 
     protected notifications() {
     }
 
-    public notifications(Long id, String type, String message, Boolean is_sent, LocalDateTime created_at, LocalDateTime sent_at) {
+    public notifications(Long id, products product, String type, String message, Boolean is_sent, LocalDateTime created_at, LocalDateTime sent_at) {
         this.id = id;
+        this.product = product;
         this.type = type;
         this.message = message;
         this.is_sent = is_sent;
@@ -63,4 +66,6 @@ public class notifications {
     public LocalDateTime getSent_at() {
         return sent_at;
     }
+    public products getProduct() {
+        return product; }
 }
