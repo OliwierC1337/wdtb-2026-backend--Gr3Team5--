@@ -27,7 +27,7 @@
             Lokalnie podnosisz go sam na początku każdego laboratorium.
             W GitHub Actions tag lab-N uruchamia reguły laboratorium N.
         -->
-        <lab>2</lab>
+        <lab>3</lab>
     </properties>
 
     <dependencies>
