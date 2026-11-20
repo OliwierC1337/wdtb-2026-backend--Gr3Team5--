@@ -3,6 +3,10 @@ import jakarta.persistence.*;
 import pl.wsb.systemobslugiautomyjni.products.entity.products;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import pl.wsb.systemobslugiautomyjni.employees.entity.employees;
+import pl.wsb.systemobslugiautomyjni.usage.entity.usage;
 
 @Entity
 @Table(name = "notifications")
@@ -30,12 +34,23 @@ public class notifications {
     @JoinColumn(name = "product_id")
     private products product;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usage_id", unique = true)
+    private usage source_usage;
+
+    @ManyToMany
+    @JoinTable(name = "notifications_employees",
+            joinColumns = @JoinColumn(name = "notification_id"),
+            inverseJoinColumns = @JoinColumn(name = "employee_id"))
+    private List<employees> recipients = new ArrayList<>();
+
     protected notifications() {
     }
 
-    public notifications(Long id, products product, String type, String message, Boolean is_sent, LocalDateTime created_at, LocalDateTime sent_at) {
+    public notifications(Long id, products product, usage source_usage, String type, String message, Boolean is_sent, LocalDateTime created_at, LocalDateTime sent_at) {
         this.id = id;
         this.product = product;
+        this.source_usage = source_usage;
         this.type = type;
         this.message = message;
         this.is_sent = is_sent;
@@ -68,4 +83,12 @@ public class notifications {
     }
     public products getProduct() {
         return product; }
+
+    public usage getSource_usage() {
+        return source_usage;
+    }
+
+    public List<employees> getRecipients() {
+        return recipients;
+    }
 }

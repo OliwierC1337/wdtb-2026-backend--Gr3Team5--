@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import pl.wsb.systemobslugiautomyjni.usage.entity.usage;
 
 @Entity
 @Table(name = "products")
@@ -28,6 +31,8 @@ public class products {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updated_at;
 
+    @OneToMany(mappedBy = "product")
+    private List<usage> usages = new ArrayList<>();
 
     protected products() {
     }
@@ -63,5 +68,8 @@ public class products {
 
     public Long getId() {
         return id;
+    }
+    public List<usage> getUsages() {
+        return usages;
     }
 }

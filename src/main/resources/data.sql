@@ -21,18 +21,27 @@ VALUES
 ('Wosk ochronny', 'litr', 12.00, 3.00, '2026-10-24 09:00:00'),
 ('Płyn do szyb', 'litr', 2.50, 5.00, '2026-10-24 10:00:00');
 
--- – ===== LAB 03 · usage =====
--- – product_id: numer wiersza z sekcji products (1 = szampon, 2 = wosk, 3 = płyn do szyb)
 INSERT INTO usage (product_id, product_name, quantity_used, unit, used_at)
 VALUES
 (1, 'Szampon samochodowy', 1.50, 'litr', '2026-10-24 08:30:00'),
 (2, 'Wosk ochronny', 0.30, 'litr', '2026-10-24 09:15:00'),
 (3, 'Płyn do szyb', 0.50, 'litr', '2026-10-24 10:00:00');
 
--- – ===== LAB 03 · notifications =====
--- – product_id jest opcjonalne: NULL, gdy powiadomienie nie dotyczy konkretnego produktu
-INSERT INTO notifications (product_id, type, message, is_sent, created_at, sent_at)
+INSERT INTO notifications (product_id, usage_id, type, message, is_sent, created_at, sent_at)
 VALUES
-    (NULL, 'INFO', 'Myjnia została uruchomiona.', TRUE, '2026-10-24 08:30:00', '2026-10-24 08:30:05'),
-    (3, 'WARNING', 'Niski stan: płyn do szyb (2.5 l).', FALSE, '2026-10-24 09:15:00', NULL),
-    (NULL, 'SUCCESS', 'Mycie pojazdu zostało zakończone.', TRUE, '2026-10-24 10:00:00', '2026-10-24 10:00:10');
+    (NULL, NULL, 'INFO', 'Myjnia została uruchomiona.', TRUE, '2026-10-24 08:30:00', '2026-10-24 08:30:05'),
+    (3, 3, 'WARNING', 'Niski stan: płyn do szyb (2.5 l).', FALSE, '2026-10-24 09:15:00', NULL),
+    (NULL, NULL, 'SUCCESS', 'Mycie pojazdu zostało zakończone.', TRUE, '2026-10-24 10:00:00', '2026-10-24 10:00:10');
+
+INSERT INTO employees (full_name, job_title, phone, hired_at, user_account_id)
+VALUES
+    ('Tomasz Chrzanowski', 'Operator myjni', '600100200', '2026-09-01 08:00:00', 5),
+    ('Oliwier Ciszek', 'Serwisant', NULL, '2026-09-15 08:00:00', 6),
+    ('Patryk Bednarek', 'Kierownik zmiany', '600500600', '2026-10-01 08:00:00', NULL);
+
+INSERT INTO notifications_employees (notification_id, employee_id)
+VALUES
+    (1, 1),
+    (2, 1),
+    (2, 2),
+    (3, 3);
